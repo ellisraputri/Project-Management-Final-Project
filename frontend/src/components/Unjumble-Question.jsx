@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
-export default function UnjumbleQuestion({ questionsInput }) {
+export default function UnjumbleQuestion({ questionsInput, onSubmit }) {
   const [qIndex, setQIndex] = useState(0);
-  const [items, setItems] = useState(questionsInput[qIndex]);
+  const [items, setItems] = useState(questionsInput[qIndex].question);
 
   const handleDragStart = (e, index) => {
     e.dataTransfer.setData("dragIndex", index);
@@ -20,10 +20,11 @@ export default function UnjumbleQuestion({ questionsInput }) {
 
 	const handleNext = () => {
     if (qIndex < questionsInput.length - 1) {
-			setItems(questionsInput[qIndex + 1]);
+	  setItems(questionsInput[qIndex + 1].question);
       setQIndex(qIndex + 1);
     } else {
       alert("Submitted, No more questions!");
+	  onSubmit();
     }
   };
 

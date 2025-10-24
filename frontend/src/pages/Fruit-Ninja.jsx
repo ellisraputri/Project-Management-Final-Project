@@ -2,11 +2,14 @@ import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import FruitNinjaQuestion from "../components/Fruitninja-Question";
+import Leaderboard from "../components/Leaderboard";
+import FruitNinjaReviewCard from "../components/Fruitninja-Review";
 
 function FruitNinjaPage() {
   const [seconds, setSeconds] = useState(0);
-  const [running, setRunning] = useState(true);
+  const [running, setRunning] = useState(false);
   const [time, setTime] = useState("00:00");
+  const [minutesConfig, setMinutesConfig] = useState(2);
 
   const [title, setTitle] = useState("Title of the quiz");
   const [questionGroup, setQuestionGroup] = useState("动词");
@@ -18,6 +21,25 @@ function FruitNinjaPage() {
   );
 
   const [score, setScore] = useState(0);
+  const [leaderboards, setLeaderboards] = useState([
+    {"name": "ellis", "score": "10"},
+    {"name": "ellissssssssssssssssssssssssssssssssssssssssssssssss", "score": "10"},
+    {"name": "ellis", "score": "10"},
+    {"name": "ellis", "score": "10"},
+    {"name": "ellis", "score": "10"},
+    {"name": "ellis", "score": "10"},
+    {"name": "ellis", "score": "10"},
+    {"name": "ellis", "score": "10"},
+    {"name": "ellis", "score": "10"},
+    {"name": "ellis", "score": "10"},
+    {"name": "ellis", "score": "10"},
+    {"name": "ellis", "score": "10"},
+    {"name": "ellis", "score": "10"},
+  ])
+
+  function onSubmit() {
+    alert("selesai");
+  }
 
   useEffect(() => {
     let interval;
@@ -35,6 +57,11 @@ function FruitNinjaPage() {
     const sec = seconds % 60;
     const formatted = `${String(min).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
     setTime(formatted);
+
+    if(min === minutesConfig){
+      setRunning(false);
+      onSubmit();
+    }
   }, [seconds]);
 
   return (
@@ -55,7 +82,7 @@ function FruitNinjaPage() {
       </div>
 
       <div className="bg-white rounded-2xl shadow-lg overflow-hidden position-relative m-5 ml-15 mt-8 min-h-[500px]">
-        <div className="p-4">
+        {running && <div className="p-4">
           <div className="flex justify-between">
             <p
               className="text-3xl m-3 fw-bolder"
@@ -76,12 +103,23 @@ function FruitNinjaPage() {
             className="text-2xl ml-3 fw-bolder mt-1"
             style={{ color: "#526E88", fontFamily: "Nunito" }}
           >
-            <b>Slice all circles that is categorized as “{questionGroup}”</b>
+            <b>Slice all circles that is categorized as “{questionGroup}” within {minutesConfig} minutes</b>
           </p>
         </div>
+        }
         
-
-        <FruitNinjaQuestion score={score} setScore={setScore} words={questions} answers={answers}/>
+        {running? 
+          <FruitNinjaQuestion score={score} setScore={setScore} words={questions} answers={answers}/>
+          :
+          <div className="flex gap-4 p-5">
+            <div className="flex-1">
+              <Leaderboard tracks={leaderboards} />
+            </div>
+            <div className="flex-1">
+              <FruitNinjaReviewCard answers={answers} questionGroup={questionGroup} />
+            </div>
+          </div>
+        }
 
       </div>
     </div>
