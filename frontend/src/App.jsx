@@ -41,7 +41,7 @@ function MainLayout() {
 
   return (
       <>
-        <Navbar isTeacher={isTeacher}/>
+        {!location.pathname.includes("login") && <Navbar isTeacher={isTeacher}/>}
         <main className="flex-1 min-h-screen">
           <ToastContainer />
           <Routes>

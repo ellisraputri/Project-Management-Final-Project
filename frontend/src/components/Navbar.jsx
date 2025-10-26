@@ -1,6 +1,18 @@
+import { useNavigate } from "react-router-dom";
 import "../App.css"
 
 export default function Navbar({isTeacher}) {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    alert("logout");
+    navigate("/");
+  }
+
+  const handleLogin = () => {
+    navigate("/login");
+  }
+
     return (
         <div className="navbar shadow-sm sticky top-0 z-50" style={{backgroundColor:"#F5EFE6"}}>
           <div className="navbar-start px-4">
@@ -17,6 +29,7 @@ export default function Navbar({isTeacher}) {
           </div>
           <div className="navbar-end">
             <a className="btn btn-ghost rounded-4xl outline-0 text-lg mr-2 hover:outline-none" 
+              onClick={isTeacher? handleLogout : handleLogin}
               style={isTeacher? {backgroundColor: "white", fontFamily: "Nunito", color:"#6d94c5"}: {backgroundColor: "#6d94c5", fontFamily: "Nunito", color:"white"}}>
                 {isTeacher? "Logout" : "Login as Teacher"} 
             </a>
