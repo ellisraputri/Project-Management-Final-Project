@@ -3,7 +3,7 @@ import "../App.css"
 export default function Navbar({isTeacher}) {
     return (
         <div className="navbar shadow-sm sticky top-0 z-50" style={{backgroundColor:"#F5EFE6"}}>
-          <div className="navbar-start">
+          <div className="navbar-start px-4">
             <div className="dropdown">
               <div tabIndex={0}>
                 <img src="src/assets/logo.png" className="w-12 mr-3"/>
