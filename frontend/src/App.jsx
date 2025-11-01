@@ -46,17 +46,52 @@ function MainLayout() {
           <ToastContainer />
           <Routes>
             {/* Public Routes */}
-            <Route path="/" element={<WelcomePage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/student-unjumble" element={<UnjumblePage />} />
-            <Route path="/student-fruitninja" element={<FruitNinjaPage />} />
-            <Route path="/student-completesentence" element={<CompleteSentencePage />} />
+            <Route 
+              path="/" 
+              element={
+                <ProtectedRoute>
+                  <WelcomePage />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/login" 
+              element={
+                <ProtectedRoute>
+                  <LoginPage />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/student-unjumble" 
+              element={
+                <ProtectedRoute>
+                  <UnjumblePage />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/student-fruitninja" 
+              element={
+                <ProtectedRoute>
+                  <FruitNinjaPage />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/student-completesentence" 
+              element={
+                <ProtectedRoute>
+                  <CompleteSentencePage />
+                </ProtectedRoute>
+              } 
+            />
 
             {/* Teacher-only Routes */}
             <Route
               path="/teacher-quizlist"
               element={
-                <ProtectedRoute allowedRoles={["teacher"]}>
+                <ProtectedRoute>
                   <QuizListPage />
                 </ProtectedRoute>
               }
@@ -64,7 +99,7 @@ function MainLayout() {
             <Route
               path="/teacher-createquiz"
               element={
-                <ProtectedRoute allowedRoles={["teacher"]}>
+                <ProtectedRoute>
                   <CreateQuizPage />
                 </ProtectedRoute>
               }

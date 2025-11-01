@@ -1,30 +1,19 @@
-// import { AppContent } from "src/context/AppContext";
-import { useContext } from "react";
-import { Navigate } from "react-router-dom";
+import { isTeacher } from "../service/auth";
+import { Navigate, useLocation } from "react-router-dom";
 
+const ProtectedRoute = ({ children}) => {
+  const isLoggedIn = isTeacher();
+  const location = useLocation();
 
-const ProtectedRoute = ({ children, allowedRoles }) => {
-//   const { userData } = useContext(AppContent); 
+  if (isLoggedIn && !location.pathname.includes("teacher")){
+    return <Navigate to="/teacher-quizlist" replace />;
+  }
 
-//   // guest can only access the public view
-//   if(!userData){
-//     return (<Navigate to="/" />);
-//   }
+  if (!isLoggedIn && location.pathname.includes("teacher")){
+    return <Navigate to="/" replace />;
+  }
 
-//   if(!userData.isAccountVerified){
-//     return (<Navigate to="/" />);  
-//   }
-
-//   // redirect to each role's main page if they try to access unallowed link
-//   if (!allowedRoles.includes(userData.role)) {
-//     if(userData.role === 'admin') return (<Navigate to="/admindashboard" />);
-//     if(userData.role === 'participant') return (<Navigate to="/userhome" />); 
-//   }
-
-//   return children;
-
-    if(allowedRoles === "teacher") return (<Navigate to="/teacher-quizlist"/>);
-    else return children;
+  return children;
 };
 
 export default ProtectedRoute;

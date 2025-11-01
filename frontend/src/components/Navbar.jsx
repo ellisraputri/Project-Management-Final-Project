@@ -1,12 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import "../App.css"
+import { logout } from "../service/auth";
+import { toast } from "react-toastify";
 
 export default function Navbar({isTeacher}) {
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    alert("logout");
-    navigate("/");
+  const handleLogout = async() => {
+    const isSuccess = await logout();
+    if(isSuccess) {
+      toast.success("Logout success!");
+      navigate("/");
+    }
+    else toast.error("Logout failed. Please try again.");
   }
 
   const handleLogin = () => {

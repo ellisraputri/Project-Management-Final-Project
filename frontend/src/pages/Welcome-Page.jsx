@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react';
 import BackgroundLayout from '../components/Background-Layout'
+import { isTeacher } from '../service/auth';
 
 function WelcomePage() {
   const [name, setName] = useState("");
   const [quizCode, setQuizCode] = useState("");
+
 
   const handleStart = () => {
     if (!name || !quizCode) {
