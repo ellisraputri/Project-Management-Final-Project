@@ -7,7 +7,7 @@ import FruitNinjaReviewCard from "../components/Fruitninja-Review";
 
 function FruitNinjaPage() {
   const [seconds, setSeconds] = useState(0);
-  const [running, setRunning] = useState(false);
+  const [running, setRunning] = useState(true);
   const [time, setTime] = useState("00:00");
   const [minutesConfig, setMinutesConfig] = useState(2);
 
@@ -68,8 +68,7 @@ function FruitNinjaPage() {
     <div className="m-5 mt-8">
       <div className="flex">
         <button
-          className="rounded-full shadow-lg px-3 py-2 text-lg text-white"
-          style={{ backgroundColor: "#6D94C5" }}
+          className="rounded-full shadow-lg px-3 py-2 text-lg text-white bg-[#6D94C5] hover:bg-[#4c6e98] transition cursor-pointer"
         >
           <FontAwesomeIcon icon={faChevronLeft} />
         </button>
@@ -111,7 +110,7 @@ function FruitNinjaPage() {
         {running? 
           <FruitNinjaQuestion score={score} setScore={setScore} words={questions} answers={answers}/>
           :
-          <div className="flex gap-4 p-5">
+          <div className="flex gap-10 py-5 px-10 mb-5">
             <div className="flex-1">
               <Leaderboard tracks={leaderboards} />
             </div>

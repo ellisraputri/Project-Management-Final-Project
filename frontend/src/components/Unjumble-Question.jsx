@@ -48,9 +48,8 @@ export default function UnjumbleQuestion({ questionsInput, onSubmit }) {
 
 			<div className="flex justify-center mt-8">
 				<button
-					className="btn btn-ghost rounded-4xl outline-0 text-2xl py-6 px-8 hover:outline-none"
+					className="btn bg-[#6D94C5] hover:bg-[#4c6e98] transition cursor-pointer btn-ghost rounded-4xl outline-0 text-2xl py-6 px-8 hover:outline-none"
 					style={{
-						backgroundColor: "#6d94c5",
 						fontFamily: "Nunito",
 						color: "white",
 					}}

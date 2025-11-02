@@ -12,8 +12,8 @@ function UnjumbleCreateQuiz({questions}) {
 
           <div className="flex items-center gap-3 mb-4">
             <p
-              className="text-[#526E88]"
-              style={{ fontSize: "18px", minWidth: "2rem" }}
+              className="text-[#526E88] text-xl"
+              style={{ minWidth: "2rem" }}
             >
               {index + 1}.
             </p>
@@ -21,8 +21,7 @@ function UnjumbleCreateQuiz({questions}) {
               {q.jumbledWords.map((word, i) => (
                 <div
                   key={i}
-                  className="bg-[#EDE6D0] text-[#526E88] px-4 py-1 rounded-md"
-                  style={{ fontSize: "18px" }}
+                  className="bg-[#EDE6D0] text-[#526E88] px-4 py-1 rounded-md text-xl"
                 >
                   {word}
                 </div>

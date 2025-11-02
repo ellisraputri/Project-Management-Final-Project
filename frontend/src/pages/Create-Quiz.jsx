@@ -60,8 +60,7 @@ function CreateQuizPage() {
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <button
-            className="rounded-full shadow-lg px-3 py-2 text-lg text-white"
-            style={{ backgroundColor: "#6D94C5" }}
+            className="rounded-full shadow-lg px-3 py-2 text-lg text-white bg-[#6D94C5] hover:bg-[#4c6e98] transition cursor-pointer"
           >
             <FontAwesomeIcon icon={faChevronLeft} />
           </button>
@@ -74,8 +73,8 @@ function CreateQuizPage() {
         </div>
         
         <button
-          className="px-6 py-2 rounded-full text-white text-lg font-semibold shadow-md"
-          style={{ backgroundColor: "#6D94C5", fontFamily: "Nunito" }}
+          className="px-6 py-2 rounded-full bg-[#6D94C5] text-white text-lg font-semibold shadow-md hover:bg-[#4c6e98] transition cursor-pointer"
+          style={{ fontFamily: "Nunito" }}
         >
           Publish
         </button>
@@ -84,7 +83,7 @@ function CreateQuizPage() {
       <div className="flex items-center justify-between">
           <div className="bg-white w-8/10 rounded-2xl shadow-lg p-4 m-5 ml-15 mt-8 min-h-[500px]">
             <p
-              className="ml-5 mt-2 text-xl fw-bolder"
+              className="ml-5 mt-2 text-2xl fw-bolder"
               style={{ color: "#526E88", fontFamily: "Nunito" }}
             >
               <b>List of Questions</b>
@@ -107,7 +106,6 @@ function CreateQuizPage() {
                   No questions added yet.
                 </p>
               )}
-
             </div>
           </div>
 
@@ -120,11 +118,11 @@ function CreateQuizPage() {
             <h3 className="text-lg font-bold text-[#526E88] mb-2">
               Upload Questions
             </h3>
-            <button className="flex p-2 items-center w-full border border-gray-300 rounded-md bg-white py-2 hover:bg-gray-50 transition">
-              <FontAwesomeIcon icon={faUpload} className="mr-2 text-[#6D94C5]" />
-              <span>Upload File</span>
+            <button className="cursor-pointer flex p-2 items-center w-full border border-gray-300 rounded-md bg-white py-2 hover:bg-gray-50 transition">
+              <FontAwesomeIcon icon={faUpload} className="mr-2 text-[#868686]" />
+              <span className='text-[#868686] font-semibold'>Upload File</span>
             </button>
-            <p className="text-sm text-[#868686] mt-1 font-normal" style={{fontFamily: "Nunito"}}>
+            <p className="text-sm text-[#526E88] mt-1 font-normal" style={{fontFamily: "Nunito"}}>
               *Only accept xlsx and csv files
             </p>
           </div>
@@ -139,7 +137,7 @@ function CreateQuizPage() {
                 setQuizType(selectedType);
                 setQuestions([]); 
               }}
-              className="w-full border border-gray-300 rounded-md p-2 bg-white"
+              className="w-full border border-gray-300 outline-none rounded-md p-2 bg-white cursor-pointer hover:bg-gray-50 transition"
             >
               <option>Complete Sentence</option>
               <option>Fruit Ninja</option>
@@ -147,7 +145,7 @@ function CreateQuizPage() {
             </select>
             <a
               href="#"
-              className="text-[#868686] text-sm mt-2 inline-block underline hover:text-black"
+              className="text-[#526E88] text-sm mt-2 inline-block underline hover:text-black"
             >
               Download question template
             </a>

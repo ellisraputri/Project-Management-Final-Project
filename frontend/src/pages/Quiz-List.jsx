@@ -50,13 +50,6 @@ function QuizListPage() {
     <div className="m-5 mt-8">
       <div className="flex justify-between items-center mb-8">
         <div className="flex items-center">
-          <button
-            onClick={handleBack}
-            className="rounded-full shadow-lg px-3 py-2 text-lg text-white"
-            style={{ backgroundColor: "#6D94C5" }}
-          >
-            <FontAwesomeIcon icon={faChevronLeft} />
-          </button>
           <p
             className="ml-5 text-4xl fw-bolder"
             style={{ color: "#526E88", fontFamily: "Nunito" }}
@@ -66,9 +59,8 @@ function QuizListPage() {
         </div>
         <button
           onClick={handleCreateQuiz}
-          className="btn btn-ghost rounded-2xl outline-0 text-lg py-2 px-6 hover:outline-none"
+          className="btn rounded-2xl bg-[#6D94C5] btn-ghost hover:bg-[#4c6e98] outline-none transition cursor-pointer text-lg py-2 px-6 mr-5"
           style={{
-            backgroundColor: "#6d94c5",
             fontFamily: "Nunito",
             color: "white",
           }}
@@ -78,7 +70,7 @@ function QuizListPage() {
       </div>
 
       {/* Quiz Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ml-5 mr-5">
         {quizzes.map((quiz) => (
           <div
             key={quiz.id}
@@ -95,9 +87,8 @@ function QuizListPage() {
             <div className="flex gap-4 mt-6">
               <button
                 onClick={() => handleShare(quiz.id)}
-                className="flex-1 btn btn-ghost rounded-2xl text-lg"
+                className="flex-1 btn btn-ghost bg-[#6D94C5] hover:bg-[#4c6e98] transition cursor-pointer rounded-2xl text-lg"
                 style={{
-                  backgroundColor: "#6D94C5",
                   color: "white",
                   fontFamily: "Nunito",
                 }}
@@ -106,9 +97,8 @@ function QuizListPage() {
               </button>
               <button
                 onClick={() => handleEdit(quiz.id)}
-                className="flex-1 btn btn-ghost rounded-2xl text-lg"
+                className="flex-1 btn btn-ghost bg-[#6D94C5] hover:bg-[#4c6e98] transition cursor-pointer rounded-2xl text-lg"
                 style={{
-                  backgroundColor: "#6D94C5",
                   color: "white",
                   fontFamily: "Nunito",
                 }}

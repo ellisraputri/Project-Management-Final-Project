@@ -19,7 +19,7 @@ function LoginPage() {
 
   return (
     <BackgroundLayout>
-      <div className="flex flex-col items-center justify-center min-h-[80vh] text-center">
+      <div className="flex flex-col items-center justify-center min-h-[80vh] text-center mt-15">
         <div className="flex flex-col items-center mb-8">
           <div className='flex items-center gap-3 mb-2'>
             <img

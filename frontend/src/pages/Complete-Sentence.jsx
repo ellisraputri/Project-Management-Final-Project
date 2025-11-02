@@ -7,7 +7,7 @@ import CompleteSentenceReviewCard from "../components/CompleteSentence-Review";
 
 function CompleteSentencePage() {
   const [seconds, setSeconds] = useState(0);
-  const [running, setRunning] = useState(true);
+  const [running, setRunning] = useState(false);
   const [time, setTime] = useState("00:00");
 
   const [title, setTitle] = useState("Complete the Sentence");
@@ -72,8 +72,7 @@ function CompleteSentencePage() {
     <div className="m-5 mt-8">
       <div className="flex">
         <button
-          className="rounded-full shadow-lg px-3 py-2 text-lg text-white"
-          style={{ backgroundColor: "#6D94C5" }}
+          className="rounded-full shadow-lg px-3 py-2 text-lg text-white bg-[#6D94C5] hover:bg-[#4c6e98] transition cursor-pointer"
         >
           <FontAwesomeIcon icon={faChevronLeft} />
         </button>
@@ -106,7 +105,7 @@ function CompleteSentencePage() {
         {running ? 
           <CompleteSentenceQuestion questionsInput={questions} onSubmit={onSubmit}/> 
           :
-          <div className="flex gap-4">
+          <div className="flex gap-10 py-1 px-6 mb-8">
             <div className="flex-1">
               <Leaderboard tracks={leaderboards} />
             </div>

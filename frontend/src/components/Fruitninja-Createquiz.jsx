@@ -10,8 +10,8 @@ function FruitNinjaCreateQuiz({questions}) {
         >
           {/* Question Text */}
           <p
-            className="text-[#526E88] mb-4"
-            style={{ fontFamily: "Nunito", fontSize: "18px" }}
+            className="text-[#526E88] mb-4 text-xl"
+            style={{ fontFamily: "Nunito" }}
           >
             {index + 1}. {item.instruction || item.question}
           </p>

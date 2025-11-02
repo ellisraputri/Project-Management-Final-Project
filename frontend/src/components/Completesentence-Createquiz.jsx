@@ -8,13 +8,13 @@ function CompleteSentenceCreateQuiz({questions}) {
         className="border border-gray-400 rounded-md p-3 mb-4 bg-white shadow-sm"
         >
         <p
-            className="text-[#526E88] mb-3"
-            style={{ fontFamily: "Nunito", fontSize: "18px" }}
+            className="text-[#526E88] mb-3 text-xl"
+            style={{ fontFamily: "Nunito" }}
         >
             {index + 1}. {q.question}
         </p>
         <div className="bg-green-200 px-3 py-1 rounded-md w-fit">
-            <p style={{ fontFamily: "Nunito", fontSize: "18px" }}>{q.answer}</p>
+            <p className="text-xl" style={{ fontFamily: "Nunito"}}>{q.answer}</p>
         </div>
         </div>
     ))

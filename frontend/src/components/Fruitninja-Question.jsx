@@ -73,7 +73,7 @@ export default function FruitNinjaQuestion({ score, setScore, words, answers }) 
 				if (i === 0) ctx.moveTo(p.x, p.y);
 				else ctx.lineTo(p.x, p.y);
 			});
-			ctx.strokeStyle = "red";
+			ctx.strokeStyle = "#6D94C5";
 			ctx.lineWidth = 4;
 			ctx.stroke();
 
