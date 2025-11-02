@@ -4,11 +4,9 @@ import axios from "axios";
 import { getHttp } from "./http";
 
 export function isTeacher() {
-  const user = localStorage.getItem("user");
-  if (!user) return false;
-
-  const parsedUser = JSON.parse(user);
-  return parsedUser.role === "teacher";
+    const user = localStorage.getItem("user");
+    if (!user) return false;
+    return true;
 }
 
 export function getUser(){
@@ -18,22 +16,22 @@ export function getUser(){
 
 export async function login(){
     try {
-      const result = await signInWithPopup(auth, provider);
-      const token = await result.user.getIdToken();
+        const result = await signInWithPopup(auth, provider);
+        const token = await result.user.getIdToken();
 
-      axios.defaults.withCredentials = true;
-      const res = await axios.post(
-        getHttp() + "/api/auth/firebase", 
-        {token,}
-      );
+        axios.defaults.withCredentials = true;
+        const res = await axios.post(
+            getHttp() + "/api/auth/firebase", 
+            {token,}
+        );
 
-      console.log("✅ Backend login success", res.data);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
-      return true;
+        console.log("✅ Backend login success", res.data);
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+        return true;
 
     } catch (err) {
-      console.error(err);
-      return false;
+        console.error(err);
+        return false;
     }
 }
 

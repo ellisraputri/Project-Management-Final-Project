@@ -1,47 +1,51 @@
-import dotenv from "dotenv";
-import userModel from "../models/user.js";    
-import quizModel from "../models/quiz.js";    
-import recordModel from "../models/record.js"; 
+import mongoose from "mongoose";
+import recordModel from "../models/record.js"; // adjust path to your model
 import connectDB from "../config/db.js";
+import dotenv from "dotenv";
 
 dotenv.config();
 
-async function seedRecords() {
+async function seed() {
   try {
     connectDB();
 
-    let user = await userModel.findOne({email: "user1@gmail.com"});
-    let quiz = await quizModel.findOne({quizCode: "QUIZ001"});
+    const quizIds = {
+      quiz_complete_sentence: "6907b1fddfb4a2d3974c24e2",
+      quiz_unjumble: "6907baaf493b989bb8509f51",
+      quiz_fruit_ninja: "6907b5822658afd531efce0e"
+    };
 
-    const records = [
-      {
-        quizId: quiz._id,
-        userId: user._id,
-        score: 90,
-        timeTaken: 30
-      },
-      {
-        quizId: quiz._id,
-        userId: user._id,
-        score: 75,
-        timeTaken: 42
-      },
-      {
-        quizId: quiz._id,
-        userId: user._id,
-        score: 100,
-        timeTaken: 25
-      }
+    const usernames = [
+      "alice","bob","charlie","david","emma","frank","george","harry","irene","jane",
+      "kevin","lisa","mark","nina","oliver","paul","queen","ryan","sara","tom",
+      "ulysses","vicky","will","xavier","yuri","zoe","adam","bella","carl","dora"
     ];
 
-    await recordModel.insertMany(records);
-    console.log("Records seeded successfully");
+    const quizTypes = ["quiz_complete_sentence","quiz_unjumble","quiz_fruit_ninja"];
+    
+    let idx = 0;
+    const records = [];
 
-    process.exit();
+    quizTypes.forEach(type => {
+      for (let i = 0; i < 10; i++) {
+        records.push({
+          quizId: quizIds[type],
+          quizType: type,
+          username: usernames[idx++],
+          score: Math.floor(Math.random() * 100),
+          timeTaken: Math.floor(Math.random() * 300) + 30
+        });
+      }
+    });
+
+    const result = await recordModel.insertMany(records);
+
+    console.log(`✅ Inserted ${result.length} records`);
+    mongoose.connection.close();
   } catch (error) {
-    console.error("Error seeding records:", error);
-    process.exit(1);
+    console.error("❌ Seeding failed:", error);
+    mongoose.connection.close();
   }
 }
 
-seedRecords();
+seed();
