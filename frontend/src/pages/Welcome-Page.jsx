@@ -20,21 +20,9 @@ function WelcomePage() {
       return;
     }
 
-    console.log("Quiz Type:", quizType);
-
-    switch (quizType) {
-      case "fruit_ninja":
-        navigate("/student-fruitninja", { state: { quizCode, username: name } });
-        break;
-      case "unjumble":
-        navigate("/student-unjumble", { state: { quizCode, username: name } });
-        break;
-      case "complete_sentence":
-        navigate("/student-completesentence", { state: { quizCode, username: name } });
-        break;
-      default:
-        alert("Unknown quiz type!");
-    }
+    // console.log("Quiz Type:", quizType);
+    const type = quizType.replace("_", "");
+    navigate(`/student-${type}`, { state: { quizCode, username: name, isStart: true } });
   };
 
 

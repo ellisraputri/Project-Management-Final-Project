@@ -13,6 +13,10 @@ const ProtectedRoute = ({ children}) => {
     return <Navigate to="/" replace />;
   }
 
+  if (location.pathname.includes("student") && (!location.state || !location.state.isStart)) {
+    return <Navigate to="/" replace />;
+  }
+
   return children;
 };
 
