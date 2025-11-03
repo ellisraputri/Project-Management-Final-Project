@@ -14,6 +14,17 @@ export const getQuizFruitNinja = async(req, res) => {
     }
 }
 
+export const getQuizUnjumble = async(req, res) => {
+    try {
+        const quizCode = req.query.quizCode;  
+        const quiz = await quizUnjumbleModel.findOne({ quizCode: quizCode, isDeleted: false, isShared: true });
+        return res.status(200).json({success:true, quiz})
+
+    } catch (error) {
+        return res.status(500).json({ success: false, message: error.message });
+    }
+}
+
 export const getQuizTypeFromCode = async(req, res) => {
     try {
         const quizCode = req.query.quizCode;  

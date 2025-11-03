@@ -13,6 +13,18 @@ export async function getQuestionsFruitNinja(quizCode){
     }
 }
 
+export async function getQuestionsUnjumble(quizCode){
+    try {
+        axios.defaults.withCredentials = true;
+        const response = await axios.get(
+            getHttp() + `/api/quiz/unjumble-questions?quizCode=${quizCode}` 
+        )
+        return response.data.quiz;
+    } catch (error) {
+        return null;
+    }
+}
+
 export async function getQuizTypeFromCode(quizCode){
     try {
         axios.defaults.withCredentials = true;

@@ -4,41 +4,46 @@ import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import UnjumbleQuestion from "../components/Unjumble-Question";
 import Leaderboard from "../components/Leaderboard";
 import UnjumbleReviewCard from "../components/Unjumble-Review";
+import { getQuestionsUnjumble } from "../service/quiz";
+import { useLocation, useNavigate } from "react-router-dom";
+
 
 function UnjumblePage() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const quizCode = location.state?.quizCode; 
+  const username = location.state?.username;
+  const [loading, setLoading] = useState(false);
+
   const [seconds, setSeconds] = useState(0);
   const [running, setRunning] = useState(false);
   const [time, setTime] = useState("00:00");
 
-  const [title, setTitle] = useState("Title of the quiz");
-  const [questions, setQuestions] = useState([
-    {question: ["我们", "要", "做", "什么", "是"], answer: "我们是要做什么"},
-    {question: ["我们", "觉得", "一点", "都不好", "你", "做的"], answer: "我们觉得你做的一点都不好" },
-    {question: ["那瓶", "给", "我", "汽水", "是", "喝", "的吗"], answer: "那瓶汽水是给我喝的吗"},
-    {question: ["那瓶", "给", "我", "汽水", "是", "喝", "的吗"], answer: "那瓶汽水是给我喝的吗"},
-    {question: ["那瓶", "给", "我", "汽水", "是", "喝", "的吗"], answer: "那瓶汽水是给我喝的吗"},
-    {question: ["那瓶", "给", "我", "汽水", "是", "喝", "的吗"], answer: "那瓶汽水是给我喝的吗"},
-    {question: ["那瓶", "给", "我", "汽水", "是", "喝", "的吗"], answer: "那瓶汽水是给我喝的吗"},
-    {question: ["那瓶", "给", "我", "汽水", "是", "喝", "的吗"], answer: "那瓶汽水是给我喝的吗"},
-    {question: ["那瓶", "给", "我", "汽水", "是", "喝", "的吗"], answer: "那瓶汽水是给我喝的吗"},
-    {question: ["那瓶", "给", "我", "汽水", "是", "喝", "的吗"], answer: "那瓶汽水是给我喝的吗"},
-  ]);
+  const [title, setTitle] = useState("");
+  const [questions, setQuestions] = useState([]);
+  const [quiz, setQuiz] = useState();
 
-  const [leaderboards, setLeaderboards] = useState([
-    {"name": "ellis", "score": "00:10"},
-    {"name": "ellissssssssssssssssssssssssssssssssssssssssssssssss", "score": "00:10"},
-    {"name": "ellis", "score": "00:10"},
-    {"name": "ellis", "score": "00:10"},
-    {"name": "ellis", "score": "00:10"},
-    {"name": "ellis", "score": "00:10"},
-    {"name": "ellis", "score": "00:10"},
-    {"name": "ellis", "score": "00:10"},
-    {"name": "ellis", "score": "00:10"},
-    {"name": "ellis", "score": "00:10"},
-    {"name": "ellis", "score": "00:10"},
-    {"name": "ellis", "score": "00:10"},
-    {"name": "ellis", "score": "00:10"},
-  ])
+  const [score, setScore] = useState(0);
+  const [leaderboards, setLeaderboards] = useState([]);
+
+  async function fetchQuestions(){
+    const resp = await getQuestionsUnjumble(quizCode);
+    if(resp === null){
+      toast.error("Question not found");
+      navigate("/");
+      return;
+    }
+    
+    const combinedList = resp.jumbledWords.map((words, index) => ({
+      question: words,
+      answer: resp.answers[index],
+    }));
+    setQuestions(combinedList)
+    
+    setTitle(resp.title);
+    setRunning(true);
+    setQuiz(resp);
+  } 
 
   function onSubmit() {
     setRunning(false);
@@ -56,6 +61,7 @@ function UnjumblePage() {
     return () => clearInterval(interval);
   }, [running]);
 
+
   useEffect(() => {
     const min = Math.floor(seconds / 60);
     const sec = seconds % 60;
@@ -63,10 +69,28 @@ function UnjumblePage() {
     setTime(formatted);
   }, [seconds]);
 
+
+  useEffect(() => {
+    if (!quizCode) return;
+    setLoading(true);
+
+    (async () => {
+      await fetchQuestions();
+      setLoading(false);
+    })();
+  }, [quizCode]);
+
+
   return (
     <div className="m-5 mt-8">
+      {loading && 
+        <div className="flex flex-col items-center justify-center min-h-[80vh] text-center mt-15">
+        <h1 className="text-xl text-center text-[#6D94C5] font-semibold" style={{fontFamily: "Nunito"}}>Loading...</h1>
+        </div>}
+
       <div className="flex">
         <button
+          onClick={() => navigate('/')}
           className="rounded-full shadow-lg px-3 py-2 text-lg text-white bg-[#6D94C5] hover:bg-[#4c6e98] transition cursor-pointer"
         >
           <FontAwesomeIcon icon={faChevronLeft} />
@@ -97,7 +121,7 @@ function UnjumblePage() {
           </div>
         }
 
-        {running? 
+        {running && !loading? 
           <UnjumbleQuestion questionsInput={questions} onSubmit={onSubmit}/> 
           :
           <div className="flex gap-10 py-1 px-6 mb-8">
