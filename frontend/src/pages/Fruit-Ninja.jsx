@@ -4,10 +4,10 @@ import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import FruitNinjaQuestion from "../components/Fruitninja-Question";
 import Leaderboard from "../components/Leaderboard";
 import FruitNinjaReviewCard from "../components/Fruitninja-Review";
-import { getQuestionsFruitNinja } from "../service/quiz";
+import { getQuestionsFruitNinja, updateQuizTotalPlays } from "../service/quiz";
 import { toast } from 'react-toastify';
 import { useLocation, useNavigate } from "react-router-dom";
-import { getLeaderboard, saveFruitNinja } from "../service/record";
+import { getLeaderboard, saveQuizResult } from "../service/record";
 
 function FruitNinjaPage() {
   const navigate = useNavigate();
@@ -50,9 +50,16 @@ function FruitNinjaPage() {
   async function onSubmit() {
     setLoading(true);
 
-    const isSuccessSave = await saveFruitNinja(quiz, username, score);
+    const type = "quiz_fruit_ninja";
+    const isSuccessSave = await saveQuizResult(quiz, type, username, score);
     if(!isSuccessSave){
       toast.error("Response cannot be saved. Please try again.");
+      return;
+    }
+
+    const isSuccessUpdatePlays = await updateQuizTotalPlays(quiz, type);
+    if(!isSuccessUpdatePlays){
+      toast.error("Response update total play failed. Please try again.");
       return;
     }
 

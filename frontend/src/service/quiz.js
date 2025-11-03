@@ -36,3 +36,15 @@ export async function getQuizTypeFromCode(quizCode){
         return null;
     }
 }
+
+export async function updateQuizTotalPlays(quiz, quizType){
+    try {
+        axios.defaults.withCredentials = true;
+        const response = await axios.put(
+            getHttp() + `/api/quiz/quiz-total-plays?quizId=${quiz._id}&quizType=${quizType}` 
+        )
+        return response.data.success;
+    } catch (error) {
+        return null;
+    }
+}

@@ -52,13 +52,13 @@ export const updateQuizTotalPlays = async(req, res) => {
         let model;
 
         switch (quizType) {
-        case "fruitninja":
+        case "quiz_fruit_ninja":
             model = quizFruitNinjaModel;
             break;
-        case "unjumble":
+        case "quiz_unjumble":
             model = quizUnjumbleModel;
             break;
-        case "completesentence":
+        case "quiz_complete_sentence":
             model = quizCompleteSentenceModel;
             break;
         default:

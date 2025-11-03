@@ -1,11 +1,11 @@
 import axios from "axios";
 import { getHttp } from "./http";
 
-export async function saveFruitNinja(quiz, username, score){
+export async function saveQuizResult(quiz, quizType, username, score){
     try {
         const reqBody = {
             "quizId": quiz._id,
-            "quizType": "quiz_fruit_ninja",
+            "quizType": quizType,
             "username": username,
             "score": score,
             "timeTaken": quiz.timeConfig
