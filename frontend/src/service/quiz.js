@@ -12,3 +12,15 @@ export async function getQuestionsFruitNinja(quizCode){
         return null;
     }
 }
+
+export async function getQuizTypeFromCode(quizCode){
+    try {
+        axios.defaults.withCredentials = true;
+        const response = await axios.get(
+            getHttp() + `/api/quiz/quiz-type?quizCode=${quizCode}` 
+        )
+        return response.data.quizType;
+    } catch (error) {
+        return null;
+    }
+}

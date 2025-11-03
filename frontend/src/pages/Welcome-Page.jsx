@@ -2,21 +2,41 @@ import React, { useEffect } from 'react'
 import { useState } from 'react';
 import BackgroundLayout from '../components/Background-Layout'
 import { useNavigate } from 'react-router-dom';
+import { getQuizTypeFromCode } from '../service/quiz';
 
 function WelcomePage() {
   const [name, setName] = useState("");
   const [quizCode, setQuizCode] = useState("");
   const navigate = useNavigate();
 
-  const handleStart = () => {
+  const handleStart = async () => {
     if (!name || !quizCode) {
       alert("Please enter both your name and quiz code!");
       return;
     }
-    console.log("Starting quiz:", { name, quizCode });
-    // navigate or handle start logic here
-    // navigate("/student-fruitninja", { state: { quizCode: 'FRUIT123', username: "Ellis" } })
+    const quizType = await getQuizTypeFromCode(quizCode);
+    if (!quizType) {
+      alert("Invalid quiz code or quiz not found!");
+      return;
+    }
+
+    console.log("Quiz Type:", quizType);
+
+    switch (quizType) {
+      case "fruit_ninja":
+        navigate("/student-fruitninja", { state: { quizCode, username: name } });
+        break;
+      case "unjumble":
+        navigate("/student-unjumble", { state: { quizCode, username: name } });
+        break;
+      case "complete_sentence":
+        navigate("/student-completesentence", { state: { quizCode, username: name } });
+        break;
+      default:
+        alert("Unknown quiz type!");
+    }
   };
+
 
   return (
     <BackgroundLayout>
