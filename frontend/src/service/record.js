@@ -1,14 +1,14 @@
 import axios from "axios";
 import { getHttp } from "./http";
 
-export async function saveQuizResult(quiz, quizType, username, score){
+export async function saveQuizResult(quiz, quizType, username, score, timeTaken){
     try {
         const reqBody = {
             "quizId": quiz._id,
             "quizType": quizType,
             "username": username,
             "score": score,
-            "timeTaken": quiz.timeConfig
+            "timeTaken": timeTaken
         };
         const response = await axios.post(
             getHttp() + "/api/record/result",

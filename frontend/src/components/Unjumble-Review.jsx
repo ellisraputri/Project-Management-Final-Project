@@ -23,9 +23,9 @@ export default function UnjumbleReviewCard({ reviews }) {
           <div key={index} className="bg-blue-50 rounded-xl p-3 leading-relaxed">
             <p>
               <span className="font-semibold">Q:</span>{" "}
-              {item.question.map((q, i) => (
+              {item.question.map((question, i) => (
                 <span key={i} className="mr-4">
-                  {q}
+                  {question}
                 </span>
               ))}
             </p>

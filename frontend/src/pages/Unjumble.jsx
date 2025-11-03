@@ -4,8 +4,9 @@ import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import UnjumbleQuestion from "../components/Unjumble-Question";
 import Leaderboard from "../components/Leaderboard";
 import UnjumbleReviewCard from "../components/Unjumble-Review";
-import { getQuestionsUnjumble } from "../service/quiz";
+import { getQuestionsUnjumble, updateQuizTotalPlays } from "../service/quiz";
 import { useLocation, useNavigate } from "react-router-dom";
+import { getLeaderboard, saveQuizResult } from "../service/record";
 
 
 function UnjumblePage() {
@@ -45,10 +46,31 @@ function UnjumblePage() {
     setQuiz(resp);
   } 
 
-  function onSubmit() {
+  async function onSubmit() {
+    setLoading(true);
+    
+    const type = "quiz_unjumble";
+    const isSuccessSave = await saveQuizResult(quiz, type, username, score, seconds);
+    if(!isSuccessSave){
+      toast.error("Response cannot be saved. Please try again.");
+      return;
+    }
+
+    const isSuccessUpdatePlays = await updateQuizTotalPlays(quiz, type);
+    if(!isSuccessUpdatePlays){
+      toast.error("Response update total play failed. Please try again.");
+      return;
+    }
+
+    const leaderboardRes = await getLeaderboard(quiz._id);
+    if(leaderboardRes === null){
+      toast.error("Failed to get leaderboard");
+      return;
+    }
+
+    setLeaderboards(leaderboardRes);
+    setLoading(false);
     setRunning(false);
-
-
   }
 
   useEffect(() => {
@@ -122,7 +144,7 @@ function UnjumblePage() {
         }
 
         {running && !loading? 
-          <UnjumbleQuestion questionsInput={questions} onSubmit={onSubmit}/> 
+          <UnjumbleQuestion questionsInput={questions} onSubmit={onSubmit} setScore={setScore}/> 
           :
           <div className="flex gap-10 py-1 px-6 mb-8">
             <div className="flex-1">

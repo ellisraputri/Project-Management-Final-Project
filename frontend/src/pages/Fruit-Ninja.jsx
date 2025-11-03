@@ -51,7 +51,7 @@ function FruitNinjaPage() {
     setLoading(true);
 
     const type = "quiz_fruit_ninja";
-    const isSuccessSave = await saveQuizResult(quiz, type, username, score);
+    const isSuccessSave = await saveQuizResult(quiz, type, username, score, quiz.timeConfig);
     if(!isSuccessSave){
       toast.error("Response cannot be saved. Please try again.");
       return;
