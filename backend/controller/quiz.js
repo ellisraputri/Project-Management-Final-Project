@@ -29,9 +29,9 @@ export const getQuizTypeFromCode = async(req, res) => {
     try {
         const quizCode = req.query.quizCode;  
         const quizModels = {
-            "fruit_ninja": quizFruitNinjaModel,
+            "fruitninja": quizFruitNinjaModel,
             "unjumble": quizUnjumbleModel,
-            "complete_sentence": quizCompleteSentenceModel
+            "completesentence": quizCompleteSentenceModel
         };
 
         for (const [type, model] of Object.entries(quizModels)) {
@@ -41,6 +41,42 @@ export const getQuizTypeFromCode = async(req, res) => {
 
         return res.status(404).json({ success: false, message: 'Quiz not found' });
     } 
+    catch (error) {
+        return res.status(500).json({ success: false, message: error.message });
+    }
+}
+
+export const updateQuizTotalPlays = async(req, res) => {
+    try{
+        const { quizId, quizType } = req.query;
+        let model;
+
+        switch (quizType) {
+        case "fruitninja":
+            model = quizFruitNinjaModel;
+            break;
+        case "unjumble":
+            model = quizUnjumbleModel;
+            break;
+        case "completesentence":
+            model = quizCompleteSentenceModel;
+            break;
+        default:
+            return res.status(400).json({ success: false, message: "Invalid quiz type" });
+        }
+
+        const updatedQuiz = await model.findOneAndUpdate(
+            { _id: quizId, isDeleted: false },
+            { $inc: { totalPlays: 1 } },
+            { new: true }
+        );
+
+        if (!updatedQuiz) {
+            return res.status(404).json({ success: false, message: "Quiz not found" });
+        }
+
+        return res.status(200).json({ success: true, message: "Quiz play count updated", quiz: updatedQuiz });
+    }
     catch (error) {
         return res.status(500).json({ success: false, message: error.message });
     }

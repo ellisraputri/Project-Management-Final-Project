@@ -19,10 +19,7 @@ function WelcomePage() {
       alert("Invalid quiz code or quiz not found!");
       return;
     }
-
-    // console.log("Quiz Type:", quizType);
-    const type = quizType.replace("_", "");
-    navigate(`/student-${type}`, { state: { quizCode, username: name, isStart: true } });
+    navigate(`/student-${quizType}`, { state: { quizCode, username: name, isStart: true } });
   };
 
 
