@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import connectDB from "./config/db.js"
 import authRouter from "./router/auth.js";
 import cookieParser from "cookie-parser";
+import quizRouter from "./router/quiz.js";
+import recordRouter from "./router/record.js";
 
 dotenv.config();
 const app = express();
@@ -22,7 +24,9 @@ app.get("/", (req, res) => {
   res.json({ message: "Backend is running 🎉" });
 });
 
-app.use('/api/auth', authRouter)
+app.use("/api/auth", authRouter);
+app.use("/api/quiz", quizRouter);
+app.use("/api/record", recordRouter);
 
 app.listen(PORT, () => {
   console.log(`✅ Server running on http://localhost:${PORT}`);

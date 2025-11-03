@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react';
 import BackgroundLayout from '../components/Background-Layout'
+import { useNavigate } from 'react-router-dom';
 
 function WelcomePage() {
   const [name, setName] = useState("");
   const [quizCode, setQuizCode] = useState("");
-
+  const navigate = useNavigate();
 
   const handleStart = () => {
     if (!name || !quizCode) {
@@ -14,6 +15,7 @@ function WelcomePage() {
     }
     console.log("Starting quiz:", { name, quizCode });
     // navigate or handle start logic here
+    // navigate("/student-fruitninja", { state: { quizCode: 'FRUIT123', username: "Ellis" } })
   };
 
   return (

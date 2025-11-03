@@ -25,7 +25,7 @@ function Leaderboard({ tracks }) {
             className="flex justify-between items-center mb-1"
           >
             <span className="truncate max-w-100">
-              {index + 1}. {track.name}
+              {index + 1}. {track.username}
             </span>
             <span>{track.score}</span>
           </div>
