@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 
 function QuizListPage() {
@@ -47,11 +45,11 @@ function QuizListPage() {
   };
 
   return (
-    <div className="m-5 mt-8">
+    <div className="mx-8 my-5 mt-8">
       <div className="flex justify-between items-center mb-8">
         <div className="flex items-center">
           <p
-            className="ml-5 text-4xl fw-bolder"
+            className="text-4xl fw-bolder"
             style={{ color: "#526E88", fontFamily: "Nunito" }}
           >
             <b>Your Quizzes</b>
@@ -59,7 +57,7 @@ function QuizListPage() {
         </div>
         <button
           onClick={handleCreateQuiz}
-          className="btn rounded-2xl bg-[#6D94C5] btn-ghost hover:bg-[#4c6e98] outline-none transition cursor-pointer text-lg py-2 px-6 mr-5"
+          className="btn rounded-2xl bg-[#6D94C5] btn-ghost hover:bg-[#4c6e98] outline-none transition cursor-pointer text-lg py-2 px-6"
           style={{
             fontFamily: "Nunito",
             color: "white",
@@ -70,7 +68,7 @@ function QuizListPage() {
       </div>
 
       {/* Quiz Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ml-5 mr-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {quizzes.map((quiz) => (
           <div
             key={quiz.id}

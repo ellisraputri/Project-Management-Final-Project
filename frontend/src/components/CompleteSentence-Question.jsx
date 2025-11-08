@@ -27,17 +27,17 @@ export default function CompleteSentenceQuestion({ questionsInput, onSubmit }) {
         {currentQuestion.question}
       </p>
 
-      {/* Answer Input "Chatbox" */}
-      <div className="flex justify-center mt-8">
+       {/* Answer Input "Chatbox" */}
+       <div className="flex justify-center mt-8">
         <input
           type="text"
           value={userAnswer}
           onChange={(e) => setUserAnswer(e.target.value)}
           placeholder="Type your answer here..."
-          className="input input-bordered w-full max-w-lg text-2xl px-6 py-8"
+          className="w-full max-w-lg text-2xl px-6 py-6 rounded-lg border-0 outline-none focus:outline-none"
           style={{
             backgroundColor: "#E8DFCA",
-            color: "black",
+            color: "#000000",
           }}
         />
       </div>
@@ -45,8 +45,9 @@ export default function CompleteSentenceQuestion({ questionsInput, onSubmit }) {
       {/* Next/Submit Button */}
       <div className="flex justify-center mt-12">
         <button
-          className="btn btn-ghost rounded-2xl bg-[#6D94C5] hover:bg-[#4c6e98] transition cursor-pointer outline-0 text-2xl py-6 px-8 hover:outline-none"
+          className="btn btn-ghost rounded-2xl outline-0 text-2xl py-6 px-8 hover:outline-none"
           style={{
+            backgroundColor: "#6d94c5",
             color: "white",
             fontFamily: "Nunito",
           }}
