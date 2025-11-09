@@ -32,7 +32,7 @@ function MainLayout() {
     { path: "/student-fruitninja" },
     { path: "/student-completesentence" },
     { path: "/teacher-quizlist" },
-    { path: "/teacher-createquiz" },
+    { path: "/teacher-createquiz/:quizId" },
   ];
   
   const location = useLocation();

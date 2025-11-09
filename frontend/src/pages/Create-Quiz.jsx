@@ -1,69 +1,101 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faUpload } from "@fortawesome/free-solid-svg-icons";
 import CompleteSentenceCreateQuiz from '../components/Completesentence-Createquiz';
 import FruitNinjaCreateQuiz from '../components/Fruitninja-Createquiz';
 import UnjumbleCreateQuiz from '../components/Unjumble-Createquiz';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import templateComplete from '../assets/template_completesentence.png';
+import templateFruit from '../assets/template_fruitninja.png';
+import templateUnjumble from '../assets/template_unjumble.png';
+import { getQuizInfos } from '../service/quiz';
 
 function CreateQuizPage() {
   const { quizID } = useParams();
-  console.log("Quiz ID:", quizID);
+  const navigate = useNavigate();
 
-  const dummyComplete = [
-    { question: "聪明的反义词是", answer: "愚钝" },
-    { question: "太阳从哪边升起？", answer: "东边" },
-    { question: "下雨时需要带什么？", answer: "伞" },
-    { question: "下雨时需要带什么？", answer: "伞" },
-    { question: "下雨时需要带什么？", answer: "伞" },
-    { question: "下雨时需要带什么？", answer: "伞" },
-    { question: "下雨时需要带什么？", answer: "伞" },
-    { question: "下雨时需要带什么？", answer: "伞" },
-  ]
-  const dummyFruit = [
-    {
-      instruction: "Slice all fruits that is categorized as '水果'",
-      options: ["自己", "梨子", "苹果", "自己", "梨子", "苹果"],
-      correct: ["梨子", "苹果"],
-    },
-  ]
-  const dummyUnjumble = [
-    {
-      question: "",
-      jumbledWords: ["她", "坐", "在那里", "静静地"],
-      answer: "她静静地坐在那里。",
-    },
-    {
-      question: "",
-      jumbledWords: ["我", "吃", "苹果"],
-      answer: "我吃苹果。",
-    },
-    {
-      question: "",
-      jumbledWords: ["我", "吃", "苹果"],
-      answer: "我吃苹果。",
-    },
-    {
-      question: "",
-      jumbledWords: ["我", "吃", "苹果"],
-      answer: "我吃苹果。",
-    },
-    {
-      question: "",
-      jumbledWords: ["我", "吃", "苹果"],
-      answer: "我吃苹果。",
-    },
-  ]
+  const imageMap = {
+    completesentence: templateComplete,
+    fruitninja: templateFruit,
+    unjumble: templateUnjumble,
+  };
+
 
   const [title, setTitle] = useState("Title of the quiz");
   const [quizType, setQuizType] = useState("Unjumble");
-  const [questions, setQuestions] = useState(dummyUnjumble);
+  const [questions, setQuestions] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  async function fetchQuizInfo(){
+    const resp = await getQuizInfos(quizID);
+    if(resp === null){
+      toast.error("Quiz not found");
+      navigate("/");
+      return;
+    }
+    const quiztype = resp.quizType
+
+    if (quiztype === 'completesentence'){
+      let questions = []
+      for (let i = 0; i < resp.quiz.questions.length; i++) {
+        questions.push({ question: resp.quiz.questions[i], answer: resp.quiz.answers[i] })
+      }
+      setQuestions(questions)
+    }
+    else if(quiztype === 'fruitninja'){
+      const questions = [
+      { instruction: resp.quiz.questionGroup, 
+        options: resp.quiz.options, 
+        corrects: resp.quiz.corrects
+      }]
+      setQuestions(questions)
+    }
+    else if(quiztype === 'unjumble'){
+      let questions = []
+      for (let i = 0; i < resp.quiz.answers.length; i++) {
+        questions.push({ jumbledWords: resp.quiz.jumbledWords[i], answer: resp.quiz.answers[i] })
+      }
+      setQuestions(questions)
+    }
+
+    const quizModels = {
+        "fruitninja": "Fruit Ninja",
+        "unjumble": "Unjumble",
+        "completesentence": "Complete Sentence"
+    };
+    
+    setTitle(resp.quiz.title);
+    setQuizType(quizModels[quiztype])
+  } 
+
+  useEffect(() => {
+    if (!quizID) return;
+    setLoading(true);
+
+    (async () => {
+      await fetchQuizInfo();
+      setLoading(false);
+    })();
+  }, [quizID]);
+
+  
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-[#526E88] text-xl font-semibold" style={{ fontFamily: "Nunito" }}>
+          Loading quiz info...
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="m-5 mt-8">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <button
+            onClick={() => navigate('/')}
             className="rounded-full shadow-lg px-3 py-2 text-lg text-white bg-[#6D94C5] hover:bg-[#4c6e98] transition cursor-pointer"
           >
             <FontAwesomeIcon icon={faChevronLeft} />
@@ -166,7 +198,7 @@ function CreateQuizPage() {
                 const cleanType = quizType.toLowerCase().replace(/\s+/g, "");
                 return (
                   <img
-                    src={`src/assets/template_${cleanType}.png`}
+                    src={imageMap[cleanType]}
                     alt={`Template for ${quizType}`}
                     className="rounded-md"
                   />
