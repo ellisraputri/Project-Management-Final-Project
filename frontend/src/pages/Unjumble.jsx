@@ -6,6 +6,7 @@ import Leaderboard from "../components/Leaderboard";
 import UnjumbleReviewCard from "../components/Unjumble-Review";
 import { getQuestionsUnjumble, updateQuizTotalPlays } from "../service/quiz";
 import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
 import { getLeaderboard, saveQuizResult } from "../service/record";
 
 

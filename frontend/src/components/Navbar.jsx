@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import "../App.css"
 import { logout } from "../service/auth";
 import { toast } from "react-toastify";
+import logoPic from "../assets/logo.png"
 
 export default function Navbar({isTeacher}) {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ export default function Navbar({isTeacher}) {
           <div className="navbar-start px-4">
             <div className="dropdown">
               <div tabIndex={0}>
-                <img src="src/assets/logo.png" className="w-12 mr-3"/>
+                <img src={logoPic} className="w-12 mr-3"/>
               </div>
             </div>
             <p 

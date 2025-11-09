@@ -48,3 +48,18 @@ export async function updateQuizTotalPlays(quiz, quizType){
         return null;
     }
 }
+
+export async function getQuizInfos(quizId){
+    try {
+        axios.defaults.withCredentials = true;
+        const response = await axios.get(
+            getHttp() + `/api/quiz/quiz-infos?quizId=${quizId}` 
+        )
+        return {
+            quiz: response.data.quiz,
+            quizType: response.data.quizType
+        };
+    } catch (error) {
+        return null;
+    }
+}

@@ -46,6 +46,27 @@ export const getQuizTypeFromCode = async(req, res) => {
     }
 }
 
+export const getQuizFromId = async(req, res) => {
+    try {
+        const quizId = req.query.quizId;  
+        const quizModels = {
+            "fruitninja": quizFruitNinjaModel,
+            "unjumble": quizUnjumbleModel,
+            "completesentence": quizCompleteSentenceModel
+        };
+
+        for (const [type, model] of Object.entries(quizModels)) {
+            const quizObj = await model.findOne({ _id: quizId, isDeleted: false });
+            if (quizObj) return res.status(200).json({ success: true, quiz: quizObj, quizType: type});
+        }
+
+        return res.status(404).json({ success: false, message: 'Quiz not found' });
+    } 
+    catch (error) {
+        return res.status(500).json({ success: false, message: error.message });
+    }
+}
+
 export const updateQuizTotalPlays = async(req, res) => {
     try{
         const { quizId, quizType } = req.query;

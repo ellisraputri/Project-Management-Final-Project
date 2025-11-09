@@ -13,7 +13,7 @@ function FruitNinjaCreateQuiz({questions}) {
             className="text-[#526E88] mb-4 text-xl"
             style={{ fontFamily: "Nunito" }}
           >
-            {index + 1}. {item.instruction || item.question}
+            {item.instruction || item.question}
           </p>
 
           {/* Word Grid */}
@@ -22,7 +22,7 @@ function FruitNinjaCreateQuiz({questions}) {
               <div
                 key={i}
                 className={`px-4 py-1 rounded-md text-lg ${
-                  item.correct.includes(opt)
+                  item.corrects.includes(opt)
                     ? "bg-green-100 text-[#526E88]"
                     : "text-[#526E88]"
                 }`}
