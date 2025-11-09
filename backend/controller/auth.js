@@ -31,6 +31,8 @@ export const loginWithGoogle = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
+    console.log("token", jwtToken)
+
     return res.status(200).json({ success: true, user });
   } catch (err) {
     console.error("Firebase verify failed", err);
