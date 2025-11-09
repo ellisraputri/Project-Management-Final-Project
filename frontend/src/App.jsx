@@ -97,7 +97,7 @@ function MainLayout() {
               }
             />
             <Route
-              path="/teacher-createquiz"
+              path="/teacher-createquiz/:quizID"
               element={
                 <ProtectedRoute>
                   <CreateQuizPage />

@@ -4,8 +4,12 @@ import { faChevronLeft, faUpload } from "@fortawesome/free-solid-svg-icons";
 import CompleteSentenceCreateQuiz from '../components/Completesentence-Createquiz';
 import FruitNinjaCreateQuiz from '../components/Fruitninja-Createquiz';
 import UnjumbleCreateQuiz from '../components/Unjumble-Createquiz';
+import { useParams } from 'react-router-dom';
 
 function CreateQuizPage() {
+  const { quizID } = useParams();
+  console.log("Quiz ID:", quizID);
+
   const dummyComplete = [
     { question: "聪明的反义词是", answer: "愚钝" },
     { question: "太阳从哪边升起？", answer: "东边" },
