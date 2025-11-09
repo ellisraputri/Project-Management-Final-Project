@@ -32,8 +32,8 @@ function QuizListPage() {
     navigate("/");
   };
 
-  const handleCreateQuiz = (quizId) => {
-    navigate(`/teacher-createquiz/${quizId}`);
+  const handleCreateQuiz = () => {
+    navigate(`/teacher-createquiz/newquiz`);
   };
 
   const handleShare = (quizId) => {

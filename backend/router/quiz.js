@@ -9,6 +9,6 @@ quizRouter.get("/unjumble-questions", getQuizUnjumble);
 quizRouter.get("/quiz-type", getQuizTypeFromCode);
 quizRouter.put("/quiz-total-plays", updateQuizTotalPlays);
 
-quizRouter.get("/quiz-infos", getQuizFromId)
+quizRouter.get("/quiz-infos", userAuth, getQuizFromId)
 
 export default quizRouter;
