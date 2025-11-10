@@ -63,3 +63,28 @@ export async function getQuizInfos(quizId){
         return null;
     }
 }
+
+export async function createNewQuiz(quizType, quizData) {
+    try {
+        axios.defaults.withCredentials = true;
+        const response = await axios.post(
+            getHttp() + `/api/quiz/new-quiz?quizType=${quizType}`, quizData
+        )
+        console.log(response.data)
+        return response.data.success;
+    } catch (error) {
+        return null;
+    }
+}
+
+export async function editExistingQuiz(quizId, quizType, quizData) {
+    try {
+        axios.defaults.withCredentials = true;
+        const response = await axios.put(
+            getHttp() + `/api/quiz/edit-quiz?quizId=${quizId}&quizType=${quizType}`, quizData
+        )
+        return response.data.success;
+    } catch (error) {
+        return null;
+    }
+}

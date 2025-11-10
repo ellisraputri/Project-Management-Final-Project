@@ -9,11 +9,12 @@ import { toast } from 'react-toastify';
 import templateComplete from '../assets/template_completesentence.png';
 import templateFruit from '../assets/template_fruitninja.png';
 import templateUnjumble from '../assets/template_unjumble.png';
-import { getQuizInfos } from '../service/quiz';
+import { createNewQuiz, editExistingQuiz, getQuizInfos } from '../service/quiz';
 import * as XLSX from 'xlsx';
 import templateCompleteFile from '../assets/template_complete_sentence.xlsx';
 import templateFruitFile from '../assets/template_fruit_ninja.xlsx';
 import templateUnjumbleFile from '../assets/template_unjumble.xlsx';
+import { getUser } from '../service/auth';
 
 
 function CreateQuizPage() {
@@ -77,6 +78,72 @@ function CreateQuizPage() {
     setTitle(resp.quiz.title);
     setQuizType(quizModels[quiztype])
   } 
+
+  async function handleSaveQuiz(){
+    // preprocess
+    const userId = getUser()._id;
+    const cleanType = quizType.toLowerCase().replace(/\s+/g, ""); 
+    let quizData = {}
+
+    if (cleanType === 'fruitninja'){
+      quizData = {
+        userId: userId,
+        title: title,
+        questionGroup: questions[0].instruction, 
+        timeConfig: 15, 
+        options: questions[0].options, 
+        corrects: questions[0].corrects
+      }
+    }
+    else if(cleanType === 'completesentence'){
+      let curr_questions = []
+      let curr_answers = []
+      for (let i = 0; i < questions.length; i++) {
+        curr_questions.push(questions[i].question)
+        curr_answers.push(questions[i].answer)
+      }
+      quizData = {
+        userId: userId,
+        title: title,
+        questions: curr_questions, 
+        answers: curr_answers
+      }
+    }
+    else if(cleanType === 'unjumble'){
+      let curr_jumbleds = []
+      let curr_answers = []
+      for (let i = 0; i < questions.length; i++) {
+        curr_jumbleds.push(questions[i].jumbledWords)
+        curr_answers.push(questions[i].answer)
+      }
+      quizData = {
+        userId: userId,
+        title: title,
+        jumbledWords: curr_jumbleds, 
+        answers: curr_answers
+      }
+    }
+
+    if(quizID === 'newquiz'){
+      const resp = await createNewQuiz(cleanType, quizData)
+      if (resp === false){
+        toast.error('Failed to create quiz.')
+      }
+      else{
+        toast.success('New quiz successfully created!')
+        navigate('/')
+      }
+    }
+    else{
+      const resp = await editExistingQuiz(quizID, cleanType, quizData)
+      if (resp === false){
+        toast.error('Failed to edit quiz.')
+      }
+      else{
+        toast.success('Quiz successfully updated!')
+      }
+    }
+  }
 
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
@@ -224,11 +291,11 @@ function CreateQuizPage() {
           </p>
         </div>
         
-        <button
+        <button onClick={handleSaveQuiz}
           className="px-6 py-2 mr-3 rounded-full bg-[#6D94C5] text-white text-lg font-semibold shadow-md hover:bg-[#4c6e98] transition cursor-pointer"
           style={{ fontFamily: "Nunito" }}
         >
-          Save
+          {quizID === 'newquiz' ? 'Publish' : 'Save'}
         </button>
       </div>
 
@@ -302,7 +369,9 @@ function CreateQuizPage() {
                 setQuizType(selectedType);
                 setQuestions([]); 
               }}
-              className="w-full border border-gray-300 outline-none rounded-md p-2 bg-white cursor-pointer hover:bg-gray-50 transition"
+              disabled = {quizID === 'newquiz' ? false : true}
+              className="w-full border border-gray-300 outline-none rounded-md p-2 
+              bg-white cursor-pointer hover:bg-gray-50 transition disabled:bg-gray-200"
             >
               <option>Complete Sentence</option>
               <option>Fruit Ninja</option>
