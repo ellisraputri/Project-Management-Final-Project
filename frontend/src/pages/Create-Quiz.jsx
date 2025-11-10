@@ -32,6 +32,7 @@ function CreateQuizPage() {
   const [quizType, setQuizType] = useState("Unjumble");
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [timeLimit, setTimeLimit] = useState(15);
 
   async function fetchQuizInfo(){
     if (quizID === 'newquiz'){
@@ -60,6 +61,7 @@ function CreateQuizPage() {
         corrects: resp.quiz.corrects
       }]
       setQuestions(questions)
+      setTimeLimit(resp.quiz.timeConfig)
     }
     else if(quiztype === 'unjumble'){
       let questions = []
@@ -90,7 +92,7 @@ function CreateQuizPage() {
         userId: userId,
         title: title,
         questionGroup: questions[0].instruction, 
-        timeConfig: 15, 
+        timeConfig: timeLimit, 
         options: questions[0].options, 
         corrects: questions[0].corrects
       }
@@ -208,9 +210,14 @@ function CreateQuizPage() {
         return;
       }
 
+      if(quizID !== 'newquiz' && detectedType !== quizType){
+        toast.error("Wrong file format. Please use a valid template.");
+        return;
+      }
+
       setQuizType(detectedType);
       setQuestions(parsedQuestions);
-      
+
       const fileName = file.name.replace(/\.[^/.]+$/, ""); 
       setTitle(fileName);
       toast.success(`Detected "${detectedType}" with ${parsedQuestions.length} questions!`);
@@ -300,7 +307,7 @@ function CreateQuizPage() {
       </div>
 
       <div className="flex items-center justify-between">
-          <div className="bg-white w-8/10 rounded-2xl shadow-lg p-4 m-5 ml-15 mt-8 min-h-[550px]">
+          <div className="bg-white w-8/10 rounded-2xl shadow-lg p-4 m-5 ml-15 mt-8 min-h-[620px] mb-10">
             <p
               className="ml-5 mt-2 text-2xl fw-bolder"
               style={{ color: "#526E88", fontFamily: "Nunito" }}
@@ -329,7 +336,7 @@ function CreateQuizPage() {
           </div>
 
         <div
-          className="rounded-lg shadow-md w-2/10 min-h-[550px] p-8 m-5 mt-8 bg-[#CBDCEB]/60"
+          className="rounded-lg shadow-md w-2/10 min-h-[620px] p-8 m-5 mt-8 bg-[#CBDCEB]/60 mb-10"
           style={{fontFamily: "Nunito" }}
         >
           {/* Upload Section */}
@@ -384,6 +391,36 @@ function CreateQuizPage() {
               Download question template
             </button>
           </div>
+
+          {/* Time Limit (only for Fruit Ninja) */}
+          {quizType === "Fruit Ninja" && (
+            <div className="mb-4">
+              <div className="flex items-center justify-between">
+                <h3
+                  className="text-lg font-bold text-[#526E88] mr-3 whitespace-nowrap"
+                  style={{ fontFamily: "Nunito" }}
+                >
+                  Time Limit (s)
+                </h3>
+
+                <input
+                  type="number"
+                  min="5"
+                  max="120"
+                  step="5"
+                  placeholder="15"
+                  value={timeLimit}
+                  onChange={(e) => setTimeLimit(Number(e.target.value))}
+                  className="border border-gray-300 rounded-md p-2 w-24 outline-none 
+                            text-[#526E88] text-center
+                            focus:ring-2 focus:ring-[#6D94C5] bg-white"
+                  style={{ fontFamily: "Nunito" }}
+                />
+              </div>
+            </div>
+          )}
+
+
 
           {/* Template Preview */}
           <div>
