@@ -5,7 +5,7 @@ export async function getTeacherQuizzes() {
     try {
         axios.defaults.withCredentials = true;
         const response = await axios.get(
-            getHttp() + "/api/quiz/teacher-quizzes"
+            getHttp() + "/api/teacher/quizzes"  
         );
         return response.data.quizzes;
     } catch (error) {
@@ -18,7 +18,7 @@ export async function toggleShareQuiz(quizId, quizType) {
     try {
         axios.defaults.withCredentials = true;
         const response = await axios.put(
-            getHttp() + "/api/quiz/share",
+            getHttp() + "/api/teacher/share",  
             { quizId, quizType }
         );
         return response.data;
@@ -32,7 +32,7 @@ export async function deleteQuiz(quizId, quizType) {
     try {
         axios.defaults.withCredentials = true;
         const response = await axios.delete(
-            getHttp() + `/api/quiz/delete?quizId=${quizId}&quizType=${quizType}`
+            getHttp() + `/api/teacher/delete?quizId=${quizId}&quizType=${quizType}`  
         );
         return response.data.success;
     } catch (error) {
