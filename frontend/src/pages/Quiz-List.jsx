@@ -1,47 +1,93 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { getTeacherQuizzes, toggleShareQuiz, deleteQuiz } from "../service/teacher";
 
 function QuizListPage() {
   const navigate = useNavigate();
+  const [quizzes, setQuizzes] = useState([]);
+
   
-  const [quizzes, setQuizzes] = useState([
-    {
-      id: 1,
-      title: "Chinese Unjumble",
-      type: "Unjumble",
-      date: "2025-1-23",
-      plays: 205,
-    },
-    {
-      id: 2,
-      title: "Chinese Ninja",
-      type: "Fruit Ninja",
-      date: "2025-1-23",
-      plays: 23,
-    },
-    {
-      id: 3,
-      title: "Complete Sentence",
-      type: "Complete Sentence", 
-      date: "2025-11-7",
-      plays: 56,
-    },
-  ]);
+  useEffect(() => {
+    fetchQuizzes();
+  }, []);
+
+  const fetchQuizzes = async () => {
+    const quizzesData = await getTeacherQuizzes();
+    
+    if (quizzesData) {
+      
+      const formattedQuizzes = quizzesData.map(quiz => ({
+        ...quiz,
+        id: quiz._id, 
+        date: new Date(quiz.date).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit'
+        })
+      }));
+      setQuizzes(formattedQuizzes);
+    } else {
+      alert("Failed to load quizzes. Please login first.");
+      navigate("/login");
+    }
+  };
 
   const handleBack = () => {
     navigate("/");
   };
 
   const handleCreateQuiz = () => {
-    navigate(`/teacher-createquiz/newquiz`);
+    navigate("/teacher-createquiz");
   };
 
-  const handleShare = (quizId) => {
-    alert(`Share quiz ${quizId}`);
+  const handleShare = async (quizId) => {
+    
+    const quiz = quizzes.find(q => q.id === quizId);
+    if (!quiz) return;
+
+    const response = await toggleShareQuiz(quiz.id, quiz.quizType);
+    
+    if (response && response.success) {
+      
+      setQuizzes(prevQuizzes => 
+        prevQuizzes.map(q => 
+          q.id === quizId 
+            ? { ...q, isShared: response.isShared }
+            : q
+        )
+      );
+      
+      alert(response.isShared 
+        ? `Quiz shared! Code: ${quiz.quizCode}` 
+        : "Quiz unshared"
+      );
+    } else {
+      alert("Failed to update share status");
+    }
   };
 
   const handleEdit = (quizId) => {
-    navigate(`/teacher-createquiz/${quizId}`);
+    alert(`Edit quiz ${quizId}`);
+  };
+
+  const handleDelete = async (quizId) => {
+    const quiz = quizzes.find(q => q.id === quizId);
+    if (!quiz) return;
+
+    const confirmDelete = window.confirm(
+      `Are you sure you want to delete "${quiz.title}"?`
+    );
+    
+    if (!confirmDelete) return;
+
+    const success = await deleteQuiz(quiz.id, quiz.quizType);
+    
+    if (success) {
+      setQuizzes(prevQuizzes => prevQuizzes.filter(q => q.id !== quizId));
+      alert("Quiz deleted successfully");
+    } else {
+      alert("Failed to delete quiz");
+    }
   };
 
   return (
@@ -76,10 +122,22 @@ function QuizListPage() {
             style={{ fontFamily: "Nunito", color: "#526E88" }}
           >
             <div>
-              <p className="text-2xl font-bold mb-2">{quiz.title}</p>
+              <div className="flex justify-between items-start mb-2">
+                <p className="text-2xl font-bold flex-1">{quiz.title}</p>
+                {quiz.isShared && (
+                  <span className="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded">
+                    Shared
+                  </span>
+                )}
+              </div>
               <p className="text-lg mb-1">Type : {quiz.type}</p>
               <p className="text-lg mb-1">Date Create : {quiz.date}</p>
               <p className="text-lg">Plays {quiz.plays}</p>
+              {quiz.isShared && (
+                <p className="text-sm mt-2 bg-blue-50 p-2 rounded">
+                  <span className="font-semibold">Code:</span> {quiz.quizCode}
+                </p>
+              )}
             </div>
 
             <div className="flex gap-4 mt-6">
@@ -91,7 +149,7 @@ function QuizListPage() {
                   fontFamily: "Nunito",
                 }}
               >
-                Share
+                {quiz.isShared ? "Unshare" : "Share"}
               </button>
               <button
                 onClick={() => handleEdit(quiz.id)}
@@ -102,6 +160,16 @@ function QuizListPage() {
                 }}
               >
                 Edit
+              </button>
+              <button
+                onClick={() => handleDelete(quiz.id)}
+                className="btn btn-ghost bg-red-500 hover:bg-red-600 transition cursor-pointer rounded-2xl text-lg px-4"
+                style={{
+                  color: "white",
+                  fontFamily: "Nunito",
+                }}
+              >
+                🗑️
               </button>
             </div>
           </div>

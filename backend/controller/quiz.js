@@ -25,6 +25,27 @@ export const getQuizUnjumble = async(req, res) => {
     }
 }
 
+export const getQuizCompleteSentence = async(req, res) => {
+    try {
+        const quizCode = req.query.quizCode;  
+        const quiz = await quizCompleteSentenceModel.findOne({ 
+            quizCode: quizCode, 
+            isDeleted: false, 
+            isShared: true 
+        });
+        
+        if (!quiz) {
+            return res.status(404).json({ success: false, message: "Quiz not found" });
+        }
+        
+        return res.status(200).json({ success: true, quiz });
+
+    } catch (error) {
+        return res.status(500).json({ success: false, message: error.message });
+    }
+}
+
+
 export const getQuizTypeFromCode = async(req, res) => {
     try {
         const quizCode = req.query.quizCode;  
@@ -210,5 +231,143 @@ export const editExistingQuiz = async(req, res) => {
     catch (err){
         console.log(err.message)
         return res.status(500).json({success: false, message: err.message});
+    }
+}
+
+
+export const getTeacherQuizzes = async(req, res) => {
+    try {
+        const teacherId = req.body.userId; 
+        
+        
+        const [fruitNinjaQuizzes, unjumbleQuizzes, completeSentenceQuizzes] = await Promise.all([
+            quizFruitNinjaModel.find({ creatorId: teacherId, isDeleted: false }),
+            quizUnjumbleModel.find({ creatorId: teacherId, isDeleted: false }),
+            quizCompleteSentenceModel.find({ creatorId: teacherId, isDeleted: false })
+        ]);
+
+        
+        const formattedQuizzes = [
+            ...fruitNinjaQuizzes.map(quiz => ({
+                _id: quiz._id,
+                title: quiz.title,
+                type: "Fruit Ninja",
+                quizType: "quiz_fruit_ninja",
+                date: quiz.createdAt,
+                plays: quiz.totalPlays,
+                isShared: quiz.isShared,
+                quizCode: quiz.quizCode
+            })),
+            ...unjumbleQuizzes.map(quiz => ({
+                _id: quiz._id,
+                title: quiz.title,
+                type: "Unjumble",
+                quizType: "quiz_unjumble",
+                date: quiz.createdAt,
+                plays: quiz.totalPlays,
+                isShared: quiz.isShared,
+                quizCode: quiz.quizCode
+            })),
+            ...completeSentenceQuizzes.map(quiz => ({
+                _id: quiz._id,
+                title: quiz.title,
+                type: "Complete Sentence",
+                quizType: "quiz_complete_sentence",
+                date: quiz.createdAt,
+                plays: quiz.totalPlays,
+                isShared: quiz.isShared,
+                quizCode: quiz.quizCode
+            }))
+        ];
+
+        
+        formattedQuizzes.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        return res.status(200).json({ success: true, quizzes: formattedQuizzes });
+
+    } catch (error) {
+        return res.status(500).json({ success: false, message: error.message });
+    }
+}
+
+
+export const toggleShareQuiz = async(req, res) => {
+    try {
+        const { quizId, quizType } = req.body;
+        const teacherId = req.body.userId; 
+
+        let model;
+        switch (quizType) {
+            case "quiz_fruit_ninja":
+                model = quizFruitNinjaModel;
+                break;
+            case "quiz_unjumble":
+                model = quizUnjumbleModel;
+                break;
+            case "quiz_complete_sentence":
+                model = quizCompleteSentenceModel;
+                break;
+            default:
+                return res.status(400).json({ success: false, message: "Invalid quiz type" });
+        }
+
+        
+        const quiz = await model.findOne({ _id: quizId, creatorId: teacherId, isDeleted: false });
+        
+        if (!quiz) {
+            return res.status(404).json({ success: false, message: "Quiz not found or unauthorized" });
+        }
+
+        
+        quiz.isShared = !quiz.isShared;
+        await quiz.save();
+
+        return res.status(200).json({ 
+            success: true, 
+            message: `Quiz ${quiz.isShared ? 'shared' : 'unshared'} successfully`,
+            isShared: quiz.isShared 
+        });
+
+    } catch (error) {
+        return res.status(500).json({ success: false, message: error.message });
+    }
+}
+
+
+export const deleteQuiz = async(req, res) => {
+    try {
+        const { quizId, quizType } = req.query;
+        const teacherId = req.body.userId; 
+
+        let model;
+        switch (quizType) {
+            case "quiz_fruit_ninja":
+                model = quizFruitNinjaModel;
+                break;
+            case "quiz_unjumble":
+                model = quizUnjumbleModel;
+                break;
+            case "quiz_complete_sentence":
+                model = quizCompleteSentenceModel;
+                break;
+            default:
+                return res.status(400).json({ success: false, message: "Invalid quiz type" });
+        }
+
+        // Find and soft delete the quiz
+        const quiz = await model.findOneAndUpdate(
+            { _id: quizId, creatorId: teacherId, isDeleted: false },
+            { isDeleted: true },
+            { new: true }
+        );
+
+        if (!quiz) {
+            return res.status(404).json({ success: false, message: "Quiz not found or unauthorized" });
+        }
+
+        return res.status(200).json({ success: true, message: "Quiz deleted successfully" });
+
+    } catch (error) {
+        return res.status(500).json({ success: false, message: error.message });
     }
 }

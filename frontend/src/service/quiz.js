@@ -25,6 +25,18 @@ export async function getQuestionsUnjumble(quizCode){
     }
 }
 
+export async function getQuestionsCompleteSentence(quizCode){
+    try {
+        axios.defaults.withCredentials = true;
+        const response = await axios.get(
+            getHttp() + `/api/quiz/complete-sentence-questions?quizCode=${quizCode}` 
+        )
+        return response.data.quiz;
+    } catch (error) {
+        return null;
+    }
+}
+
 export async function getQuizTypeFromCode(quizCode){
     try {
         axios.defaults.withCredentials = true;

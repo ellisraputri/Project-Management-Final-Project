@@ -1,54 +1,89 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate, useLocation } from "react-router-dom";
 import CompleteSentenceQuestion from "../components/CompleteSentence-Question";
 import Leaderboard from "../components/Leaderboard";
 import CompleteSentenceReviewCard from "../components/CompleteSentence-Review";
+import { getQuestionsCompleteSentence, updateQuizTotalPlays } from "../service/quiz";
+import { saveQuizResult, getLeaderboard } from "../service/record";
 
 function CompleteSentencePage() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { quizCode, username, isStart } = location.state || {};
+
   const [seconds, setSeconds] = useState(0);
   const [running, setRunning] = useState(false);
   const [time, setTime] = useState("00:00");
 
+  const [quiz, setQuiz] = useState(null);
   const [title, setTitle] = useState("Complete the Sentence");
-  const [questions, setQuestions] = useState([
-    {
-      question: "[____] is the beast associated with the origin of lunar chinese new year",
-      answer: "年兽"
-    },
-    {
-      question: "[____] 是中国的首都。",
-      answer: "北京"
-    },
-    {
-      question: "《西游记》中，保护唐僧取经的大徒弟是 [____]。",
-      answer: "孙悟空"
-    },
-    {
-      question: "中国农历新年的最后一天（正月十五）是 [____] 节。",
-      answer: "元宵"
-    },
-    {
-      question: "中国古代的“四大发明”包括造纸术、指南针、火药和 [____]。",
-      answer: "印刷术"
+  const [questions, setQuestions] = useState([]);
+  const [leaderboards, setLeaderboards] = useState([]);
+
+  
+  useEffect(() => {
+    const fetchQuiz = async () => {
+      if (!quizCode || !isStart) {
+        alert("No quiz code provided!");
+        navigate("/");
+        return;
+      }
+
+      const quizData = await getQuestionsCompleteSentence(quizCode);
+      
+      if (quizData) {
+        setQuiz(quizData);
+        setTitle(quizData.title);
+        
+        
+        const formattedQuestions = quizData.questions.map((q, index) => ({
+          question: q,
+          answer: quizData.answers[index]
+        }));
+        setQuestions(formattedQuestions);
+        setRunning(true);
+      } else {
+        alert("Quiz not found!");
+        navigate("/");
+      }
+    };
+
+    fetchQuiz();
+  }, [quizCode, navigate]);
+
+  
+  const fetchLeaderboardData = async () => {
+    const records = await getLeaderboard(quiz._id);
+    if (records) {
+      const formattedLeaderboard = records
+        .sort((a, b) => a.timeTaken - b.timeTaken)
+        .map(record => ({
+          username: record.username,
+          score: formatTime(record.timeTaken)
+        }));
+      setLeaderboards(formattedLeaderboard);
     }
-  ]);
+  };
 
-  const [leaderboards, setLeaderboards] = useState([
-    {"name": "Ellis", "score": "00:45"},
-    {"name": "Eastvara", "score": "01:02"},
-    {"name": "Cia", "score": "01:15"},
-    {"name": "Mikel", "score": "01:23"},
-    {"name": "Annabel", "score": "01:34"},
-    {"name": "Davideus", "score": "01:45"},
-    {"name": "Emmanuel", "score": "01:52"},
-    {"name": "Christopher", "score": "02:05"},
-    {"name": "Lisara", "score": "02:18"},
-    {"name": "Kirara", "score": "02:30"}
-  ]);
+  const formatTime = (totalSeconds) => {
+    const min = Math.floor(totalSeconds / 60);
+    const sec = totalSeconds % 60;
+    return `${String(min).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
+  };
 
-  function onSubmit() {
+  async function onSubmit() {
     setRunning(false);
+
+    
+    await saveQuizResult(quiz, "quiz_complete_sentence", username, questions.length, seconds);
+    
+    
+    await updateQuizTotalPlays(quiz, "quiz_complete_sentence");
+    
+    
+    await fetchLeaderboardData();
   }
 
   useEffect(() => {
@@ -72,6 +107,7 @@ function CompleteSentencePage() {
     <div className="m-5 mt-8">
       <div className="flex">
         <button
+          onClick={() => navigate("/")}
           className="rounded-full shadow-lg px-3 py-2 text-lg text-white bg-[#6D94C5] hover:bg-[#4c6e98] transition cursor-pointer"
         >
           <FontAwesomeIcon icon={faChevronLeft} />
