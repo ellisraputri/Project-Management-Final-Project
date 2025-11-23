@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const quizFruitNinjaSchema = new mongoose.Schema({
+const quizFruitSlicingSchema = new mongoose.Schema({
     quizCode: { type: String, required: true },
     title: { type: String, required: true },
     questionGroup: { type: String, required: true },
@@ -13,6 +13,6 @@ const quizFruitNinjaSchema = new mongoose.Schema({
     isDeleted: { type: Boolean, required: true },    
   }, {timestamps: true});
   
-const quizFruitNinjaModel = mongoose.models.quiz_fruit_ninja || mongoose.model('quiz_fruit_ninja', quizFruitNinjaSchema);
+const quizFruitSlicingModel = mongoose.models.quiz_fruit_slicing || mongoose.model('quiz_fruit_slicing', quizFruitSlicingSchema);
 
-export default quizFruitNinjaModel
+export default quizFruitSlicingModel

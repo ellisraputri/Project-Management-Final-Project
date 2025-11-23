@@ -1,11 +1,11 @@
-import quizFruitNinjaModel from "../models/quiz_fruitninja.js"
+import quizFruitSlicingModel from "../models/quiz_fruitslicing.js"
 import quizUnjumbleModel from "../models/quiz_unjumble.js";
 import quizCompleteSentenceModel from "../models/quiz_completesentence.js"
 
-export const getQuizFruitNinja = async(req, res) => {
+export const getQuizFruitSlicing = async(req, res) => {
     try {
         const quizCode = req.query.quizCode;  
-        const quiz = await quizFruitNinjaModel.findOne({ quizCode: quizCode, isDeleted: false });
+        const quiz = await quizFruitSlicingModel.findOne({ quizCode: quizCode, isDeleted: false });
         
         return res.status(200).json({success:true, quiz})
 
@@ -50,7 +50,7 @@ export const getQuizTypeFromCode = async(req, res) => {
     try {
         const quizCode = req.query.quizCode;  
         const quizModels = {
-            "fruitninja": quizFruitNinjaModel,
+            "fruitslicing": quizFruitSlicingModel,
             "unjumble": quizUnjumbleModel,
             "completesentence": quizCompleteSentenceModel
         };
@@ -71,7 +71,7 @@ export const getQuizFromId = async(req, res) => {
     try {
         const quizId = req.query.quizId;  
         const quizModels = {
-            "fruitninja": quizFruitNinjaModel,
+            "fruitslicing": quizFruitSlicingModel,
             "unjumble": quizUnjumbleModel,
             "completesentence": quizCompleteSentenceModel
         };
@@ -94,8 +94,8 @@ export const updateQuizTotalPlays = async(req, res) => {
         let model;
 
         switch (quizType) {
-        case "quiz_fruit_ninja":
-            model = quizFruitNinjaModel;
+        case "quiz_fruit_slicing":
+            model = quizFruitSlicingModel;
             break;
         case "quiz_unjumble":
             model = quizUnjumbleModel;
@@ -128,9 +128,9 @@ export const createNewQuiz = async(req, res) => {
     try{
         const { quizType } = req.query
 
-        if (quizType === "fruitninja"){
+        if (quizType === "fruitslicing"){
             const {userId, title, questionGroup, timeConfig, options, corrects} = req.body;
-            const newQuiz = await quizFruitNinjaModel.create({
+            const newQuiz = await quizFruitSlicingModel.create({
                 "quizCode" : "-",
                 "title" : title,
                 "questionGroup": questionGroup,
@@ -184,9 +184,9 @@ export const editExistingQuiz = async(req, res) => {
     try{
         const {quizId, quizType} = req.query
 
-        if (quizType === "fruitninja"){
+        if (quizType === "fruitslicing"){
             const {userId, title, questionGroup, timeConfig, options, corrects} = req.body;
-            const quizObj = await quizFruitNinjaModel.findById(quizId);
+            const quizObj = await quizFruitSlicingModel.findById(quizId);
 
             if (String(quizObj.creatorId) !== userId){
                 return res.status(401).json({success: false, message: "Unauthorized edit"})
@@ -240,19 +240,19 @@ export const getTeacherQuizzes = async(req, res) => {
         const teacherId = req.body.userId; 
         
         
-        const [fruitNinjaQuizzes, unjumbleQuizzes, completeSentenceQuizzes] = await Promise.all([
-            quizFruitNinjaModel.find({ creatorId: teacherId, isDeleted: false }),
+        const [fruitSlicingQuizzes, unjumbleQuizzes, completeSentenceQuizzes] = await Promise.all([
+            quizFruitSlicingModel.find({ creatorId: teacherId, isDeleted: false }),
             quizUnjumbleModel.find({ creatorId: teacherId, isDeleted: false }),
             quizCompleteSentenceModel.find({ creatorId: teacherId, isDeleted: false })
         ]);
 
         
         const formattedQuizzes = [
-            ...fruitNinjaQuizzes.map(quiz => ({
+            ...fruitSlicingQuizzes.map(quiz => ({
                 _id: quiz._id,
                 title: quiz.title,
-                type: "Fruit Ninja",
-                quizType: "quiz_fruit_ninja",
+                type: "Fruit Slicing",
+                quizType: "quiz_fruit_slicing",
                 date: quiz.createdAt,
                 plays: quiz.totalPlays,
                 isShared: quiz.isShared,
@@ -301,8 +301,8 @@ export const toggleShareQuiz = async(req, res) => {
 
         let model;
         switch (quizType) {
-            case "quiz_fruit_ninja":
-                model = quizFruitNinjaModel;
+            case "quiz_fruit_slicing":
+                model = quizFruitSlicingModel;
                 break;
             case "quiz_unjumble":
                 model = quizUnjumbleModel;
@@ -349,8 +349,8 @@ export const deleteQuiz = async(req, res) => {
 
         let model;
         switch (quizType) {
-            case "quiz_fruit_ninja":
-                model = quizFruitNinjaModel;
+            case "quiz_fruit_slicing":
+                model = quizFruitSlicingModel;
                 break;
             case "quiz_unjumble":
                 model = quizUnjumbleModel;

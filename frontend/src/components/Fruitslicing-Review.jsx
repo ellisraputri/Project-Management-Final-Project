@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function FruitNinjaReviewCard({ questionGroup, answers }) {
+export default function FruitSlicingReviewCard({ questionGroup, answers }) {
   return (
     <div className="w-full bg-white rounded-2xl border p-5 mt-4">
       <p

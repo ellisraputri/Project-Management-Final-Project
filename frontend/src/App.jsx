@@ -8,7 +8,7 @@ import { ToastContainer } from 'react-toastify';
 import WelcomePage from "./pages/Welcome-Page";
 import LoginPage from "./pages/Login";
 import UnjumblePage from "./pages/Unjumble";
-import FruitNinjaPage from "./pages/Fruit-Ninja";
+import FruitSlicingPage from "./pages/Fruit-Slicing";
 import CompleteSentencePage from "./pages/Complete-Sentence";
 import QuizListPage from "./pages/Quiz-List";
 import CreateQuizPage from "./pages/Create-Quiz";
@@ -29,7 +29,7 @@ function MainLayout() {
     { path: "/" },
     { path: "/login" },
     { path: "/student-unjumble" },
-    { path: "/student-fruitninja" },
+    { path: "/student-fruitslicing" },
     { path: "/student-completesentence" },
     { path: "/teacher-quizlist" },
     { path: "/teacher-createquiz/:quizId" },
@@ -71,10 +71,10 @@ function MainLayout() {
               } 
             />
             <Route 
-              path="/student-fruitninja" 
+              path="/student-fruitslicing" 
               element={
                 <ProtectedRoute>
-                  <FruitNinjaPage />
+                  <FruitSlicingPage />
                 </ProtectedRoute>
               } 
             />

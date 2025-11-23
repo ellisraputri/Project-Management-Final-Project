@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
-import FruitNinjaQuestion from "../components/Fruitninja-Question";
+import FruitSlicingQuestion from "../components/Fruitslicing-Question";
 import Leaderboard from "../components/Leaderboard";
-import FruitNinjaReviewCard from "../components/Fruitninja-Review";
-import { getQuestionsFruitNinja, updateQuizTotalPlays } from "../service/quiz";
+import FruitSlicingReviewCard from "../components/Fruitslicing-Review";
+import { getQuestionsFruitSlicing, updateQuizTotalPlays } from "../service/quiz";
 import { toast } from 'react-toastify';
 import { useLocation, useNavigate } from "react-router-dom";
 import { getLeaderboard, saveQuizResult } from "../service/record";
 
-function FruitNinjaPage() {
+function FruitSlicingPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const quizCode = location.state?.quizCode; 
@@ -31,7 +31,7 @@ function FruitNinjaPage() {
   const [leaderboards, setLeaderboards] = useState([]);
 
   async function fetchQuestions(){
-    const resp = await getQuestionsFruitNinja(quizCode);
+    const resp = await getQuestionsFruitSlicing(quizCode);
     if(resp === null){
       toast.error("Question not found");
       navigate("/");
@@ -50,7 +50,7 @@ function FruitNinjaPage() {
   async function onSubmit() {
     setLoading(true);
 
-    const type = "quiz_fruit_ninja";
+    const type = "quiz_fruit_slicing";
     const isSuccessSave = await saveQuizResult(quiz, type, username, score, quiz.timeConfig);
     if(!isSuccessSave){
       toast.error("Response cannot be saved. Please try again.");
@@ -157,14 +157,14 @@ function FruitNinjaPage() {
         }
         
         {running && !loading ? 
-          <FruitNinjaQuestion score={score} setScore={setScore} words={questions} answers={answers}/>
+          <FruitSlicingQuestion score={score} setScore={setScore} words={questions} answers={answers}/>
           :
           <div className="flex gap-10 py-5 px-10 mb-5">
             <div className="flex-1">
               <Leaderboard tracks={leaderboards} />
             </div>
             <div className="flex-1">
-              <FruitNinjaReviewCard answers={answers} questionGroup={questionGroup} />
+              <FruitSlicingReviewCard answers={answers} questionGroup={questionGroup} />
             </div>
           </div>
         }
@@ -174,4 +174,4 @@ function FruitNinjaPage() {
   );
 }
 
-export default FruitNinjaPage;
+export default FruitSlicingPage;

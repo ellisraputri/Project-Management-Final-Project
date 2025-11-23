@@ -12,7 +12,7 @@ async function seed() {
     const quizIds = {
       quiz_complete_sentence: "6907b1fddfb4a2d3974c24e2",
       quiz_unjumble: "6907baaf493b989bb8509f51",
-      quiz_fruit_ninja: "6907b5822658afd531efce0e"
+      quiz_fruit_slicing: "6907b5822658afd531efce0e"
     };
 
     const usernames = [
@@ -21,7 +21,7 @@ async function seed() {
       "ulysses","vicky","will","xavier","yuri","zoe","adam","bella","carl","dora"
     ];
 
-    const quizTypes = ["quiz_complete_sentence","quiz_unjumble","quiz_fruit_ninja"];
+    const quizTypes = ["quiz_complete_sentence","quiz_unjumble","quiz_fruit_slicing"];
     
     let idx = 0;
     const records = [];

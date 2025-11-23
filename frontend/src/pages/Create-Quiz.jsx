@@ -2,17 +2,17 @@ import React, { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faUpload } from "@fortawesome/free-solid-svg-icons";
 import CompleteSentenceCreateQuiz from '../components/Completesentence-Createquiz';
-import FruitNinjaCreateQuiz from '../components/Fruitninja-Createquiz';
+import FruitSlicingCreateQuiz from '../components/Fruitslicing-Createquiz';
 import UnjumbleCreateQuiz from '../components/Unjumble-Createquiz';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import templateComplete from '../assets/template_completesentence.png';
-import templateFruit from '../assets/template_fruitninja.png';
+import templateFruit from '../assets/template_fruitslicing.png';
 import templateUnjumble from '../assets/template_unjumble.png';
 import { createNewQuiz, editExistingQuiz, getQuizInfos } from '../service/quiz';
 import * as XLSX from 'xlsx';
 import templateCompleteFile from '../assets/template_complete_sentence.xlsx';
-import templateFruitFile from '../assets/template_fruit_ninja.xlsx';
+import templateFruitFile from '../assets/template_fruit_slicing.xlsx';
 import templateUnjumbleFile from '../assets/template_unjumble.xlsx';
 import { getUser } from '../service/auth';
 import Modal from "../components/Modal";
@@ -26,7 +26,7 @@ function CreateQuizPage() {
 
   const imageMap = {
     completesentence: templateComplete,
-    fruitninja: templateFruit,
+    fruitslicing: templateFruit,
     unjumble: templateUnjumble,
   };
 
@@ -58,7 +58,7 @@ function CreateQuizPage() {
       }
       setQuestions(questions)
     }
-    else if(quiztype === 'fruitninja'){
+    else if(quiztype === 'fruitslicing'){
       const questions = [
       { instruction: resp.quiz.questionGroup, 
         options: resp.quiz.options, 
@@ -76,7 +76,7 @@ function CreateQuizPage() {
     }
 
     const quizModels = {
-        "fruitninja": "Fruit Ninja",
+        "fruitslicing": "Fruit Slicing",
         "unjumble": "Unjumble",
         "completesentence": "Complete Sentence"
     };
@@ -91,7 +91,7 @@ function CreateQuizPage() {
     const cleanType = quizType.toLowerCase().replace(/\s+/g, ""); 
     let quizData = {}
 
-    if (cleanType === 'fruitninja'){
+    if (cleanType === 'fruitslicing'){
       quizData = {
         userId: userId,
         title: title,
@@ -183,7 +183,7 @@ function CreateQuizPage() {
         });
       }
       else if (headers.includes("options") && headers.includes("corrects")) {
-        detectedType = "Fruit Ninja";
+        detectedType = "Fruit Slicing";
         const question = rows[0][headers.indexOf("question")];
 
         const options = rows
@@ -244,9 +244,9 @@ function CreateQuizPage() {
         templateFile = templateCompleteFile;
         fileName = "template_complete_sentence.xlsx";
         break;
-      case "fruitninja":
+      case "fruitslicing":
         templateFile = templateFruitFile;
-        fileName = "template_fruit_ninja.xlsx";
+        fileName = "template_fruit_slicing.xlsx";
         break;
       case "unjumble":
         templateFile = templateUnjumbleFile;
@@ -366,8 +366,8 @@ function CreateQuizPage() {
               {questions.length > 0 ? (
                 quizType === "Complete Sentence" ? (
                   <CompleteSentenceCreateQuiz questions={questions} />
-                ) : quizType === "Fruit Ninja" ? (
-                  <FruitNinjaCreateQuiz questions={questions} />
+                ) : quizType === "Fruit Slicing" ? (
+                  <FruitSlicingCreateQuiz questions={questions} />
                 ) : quizType === "Unjumble" ? (
                   <UnjumbleCreateQuiz questions={questions} />
                 ) : null
@@ -425,7 +425,7 @@ function CreateQuizPage() {
               bg-white cursor-pointer hover:bg-gray-50 transition disabled:bg-gray-200"
             >
               <option>Complete Sentence</option>
-              <option>Fruit Ninja</option>
+              <option>Fruit Slicing</option>
               <option>Unjumble</option>
             </select>
             <button
@@ -436,8 +436,8 @@ function CreateQuizPage() {
             </button>
           </div>
 
-          {/* Time Limit (only for Fruit Ninja) */}
-          {quizType === "Fruit Ninja" && (
+          {/* Time Limit (only for Fruit Slicing) */}
+          {quizType === "Fruit Slicing" && (
             <div className="mb-4">
               <div className="flex items-center justify-between">
                 <h3

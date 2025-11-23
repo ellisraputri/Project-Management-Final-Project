@@ -9,7 +9,7 @@ const recordSchema = new mongoose.Schema({
   quizType: { 
     type: String, 
     required: true,
-    enum: ["quiz_complete_sentence", "quiz_unjumble", "quiz_fruit_ninja"]  
+    enum: ["quiz_complete_sentence", "quiz_unjumble", "quiz_fruit_slicing"]  
   },
   username: { type: String, required: true },
   score: { type: Number, required: true },

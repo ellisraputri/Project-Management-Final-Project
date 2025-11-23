@@ -1,10 +1,10 @@
 import express from "express";
-import { createNewQuiz, editExistingQuiz, getQuizFromId, getQuizFruitNinja, getQuizCompleteSentence, getQuizTypeFromCode, getQuizUnjumble, updateQuizTotalPlays } from "../controller/quiz.js";
+import { createNewQuiz, editExistingQuiz, getQuizFromId, getQuizFruitSlicing, getQuizCompleteSentence, getQuizTypeFromCode, getQuizUnjumble, updateQuizTotalPlays } from "../controller/quiz.js";
 import userAuth from "../middleware/auth.js";
 
 const quizRouter = express.Router();
 
-quizRouter.get("/fruit-ninja-questions", getQuizFruitNinja);
+quizRouter.get("/fruit-slicing-questions", getQuizFruitSlicing);
 quizRouter.get("/unjumble-questions", getQuizUnjumble);
 quizRouter.get("/complete-sentence-questions", getQuizCompleteSentence);  
 quizRouter.get("/quiz-type", getQuizTypeFromCode);

@@ -1,6 +1,6 @@
 import React from "react";
 
-function FruitNinjaCreateQuiz({questions}) {
+function FruitSlicingCreateQuiz({questions}) {
   return (
     <div className="space-y-6">
       {questions.map((item, index) => (
@@ -38,4 +38,4 @@ function FruitNinjaCreateQuiz({questions}) {
   );
 }
 
-export default FruitNinjaCreateQuiz;
+export default FruitSlicingCreateQuiz;

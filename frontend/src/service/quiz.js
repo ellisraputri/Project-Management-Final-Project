@@ -1,11 +1,11 @@
 import axios from "axios";
 import {getHttp} from "./http.js";
 
-export async function getQuestionsFruitNinja(quizCode){
+export async function getQuestionsFruitSlicing(quizCode){
     try {
         axios.defaults.withCredentials = true;
         const response = await axios.get(
-            getHttp() + `/api/quiz/fruit-ninja-questions?quizCode=${quizCode}` 
+            getHttp() + `/api/quiz/fruit-slicing-questions?quizCode=${quizCode}` 
         )
         return response.data.quiz;
     } catch (error) {

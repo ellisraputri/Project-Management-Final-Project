@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import quizFruitNinjaModel from "../models/quiz_fruitninja.js"
+import quizFruitSlicingModel from "../models/quiz_fruitslicing.js";
 import connectDB from "../config/db.js";
 import dotenv from "dotenv";
 
@@ -11,7 +11,7 @@ async function seed() {
 
     const seedData = {
       quizCode: "FRUIT123",
-      title: "Fruit Ninja Quiz",
+      title: "Fruit Quiz",
       questionGroup: "水果",
       timeConfig: "120",
       options: [
@@ -26,7 +26,7 @@ async function seed() {
       isDeleted: false
     };
 
-    const newQuiz = await quizFruitNinjaModel.create(seedData);
+    const newQuiz = await quizFruitSlicingModel.create(seedData);
 
     console.log("✅ Seeded successfully:", newQuiz);
     mongoose.connection.close();

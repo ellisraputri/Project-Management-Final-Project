@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 
-export default function FruitNinjaQuestion({ score, setScore, words, answers }) {
+export default function FruitSlicingQuestion({ score, setScore, words, answers }) {
   const canvasRef = useRef(null);
   const trail = useRef([]);
   const fruits = useRef([]);
