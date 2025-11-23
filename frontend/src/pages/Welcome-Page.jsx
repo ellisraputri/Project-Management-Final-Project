@@ -3,6 +3,7 @@ import { useState } from 'react';
 import BackgroundLayout from '../components/Background-Layout'
 import { useNavigate } from 'react-router-dom';
 import { getQuizTypeFromCode } from '../service/quiz';
+import { toast } from 'react-toastify';
 
 function WelcomePage() {
   const [name, setName] = useState("");
@@ -11,12 +12,12 @@ function WelcomePage() {
 
   const handleStart = async () => {
     if (!name || !quizCode) {
-      alert("Please enter both your name and quiz code!");
+      toast.error("Please enter both your name and quiz code!");
       return;
     }
     const quizType = await getQuizTypeFromCode(quizCode);
     if (!quizType) {
-      alert("Invalid quiz code or quiz not found!");
+      toast.error("Invalid quiz code or quiz not found!");
       return;
     }
     navigate(`/student-${quizType}`, { state: { quizCode, username: name, isStart: true } });

@@ -69,7 +69,11 @@ function UnjumblePage() {
       return;
     }
 
-    setLeaderboards(leaderboardRes);
+    const sortedTracks = [...leaderboardRes].sort((a, b) => {
+      if (b.score !== a.score) return b.score - a.score;         
+      return a.timeTaken - b.timeTaken;                          
+    });
+    setLeaderboards(sortedTracks);
     setLoading(false);
     setRunning(false);
   }

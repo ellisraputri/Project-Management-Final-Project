@@ -3,17 +3,16 @@ import React, { useState } from "react";
 export default function CompleteSentenceQuestion({ questionsInput, onSubmit }) {
   const [qIndex, setQIndex] = useState(0);
   const [userAnswer, setUserAnswer] = useState("");
+  const [score, setScore] = useState(0);
   const currentQuestion = questionsInput[qIndex];
 
-  const handleNext = () => {
-    
-    
+  const handleNext = () => {    
     if (qIndex < questionsInput.length - 1) {
+      if(userAnswer === currentQuestion.answer) setScore(score+1);
       setQIndex(qIndex + 1);
       setUserAnswer(""); 
     } else {
-      
-      onSubmit();
+      onSubmit(score);
     }
   };
 

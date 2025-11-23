@@ -55,16 +55,17 @@ function CompleteSentencePage() {
 
   
   const fetchLeaderboardData = async () => {
-    const records = await getLeaderboard(quiz._id);
-    if (records) {
-      const formattedLeaderboard = records
-        .sort((a, b) => a.timeTaken - b.timeTaken)
-        .map(record => ({
-          username: record.username,
-          score: formatTime(record.timeTaken)
-        }));
-      setLeaderboards(formattedLeaderboard);
+    const leaderboardRes = await getLeaderboard(quiz._id);
+    if(leaderboardRes === null){
+      toast.error("Failed to get leaderboard");
+      return;
     }
+
+    const sortedTracks = [...leaderboardRes].sort((a, b) => {
+      if (b.score !== a.score) return b.score - a.score;         
+      return a.timeTaken - b.timeTaken;                          
+    });
+    setLeaderboards(sortedTracks);
   };
 
   const formatTime = (totalSeconds) => {
@@ -73,11 +74,10 @@ function CompleteSentencePage() {
     return `${String(min).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
   };
 
-  async function onSubmit() {
+  async function onSubmit(score) {
     setRunning(false);
 
-    
-    await saveQuizResult(quiz, "quiz_complete_sentence", username, questions.length, seconds);
+    await saveQuizResult(quiz, "quiz_complete_sentence", username, score, seconds);
     
     
     await updateQuizTotalPlays(quiz, "quiz_complete_sentence");

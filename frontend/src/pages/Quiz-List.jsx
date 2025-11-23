@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getTeacherQuizzes, toggleShareQuiz, deleteQuiz } from "../service/teacher";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
 
 function QuizListPage() {
   const navigate = useNavigate();
@@ -27,47 +30,41 @@ function QuizListPage() {
       }));
       setQuizzes(formattedQuizzes);
     } else {
-      alert("Failed to load quizzes. Please login first.");
+      toast.error("Failed to load quizzes. Please login first.");
       navigate("/login");
     }
   };
 
-  const handleBack = () => {
-    navigate("/");
-  };
-
   const handleCreateQuiz = () => {
-    navigate("/teacher-createquiz");
+    navigate("/teacher-createquiz/newquiz");
   };
 
   const handleShare = async (quizId) => {
-    
     const quiz = quizzes.find(q => q.id === quizId);
     if (!quiz) return;
 
     const response = await toggleShareQuiz(quiz.id, quiz.quizType);
     
     if (response && response.success) {
-      
       setQuizzes(prevQuizzes => 
         prevQuizzes.map(q => 
           q.id === quizId 
-            ? { ...q, isShared: response.isShared }
+            ? { ...q, isShared: response.isShared, quizCode: response.quizCode }
             : q
         )
       );
       
       alert(response.isShared 
-        ? `Quiz shared! Code: ${quiz.quizCode}` 
+        ? `Quiz shared! Code: ${response.quizCode}` 
         : "Quiz unshared"
       );
     } else {
-      alert("Failed to update share status");
+      toast.error("Failed to update share status");
     }
   };
 
   const handleEdit = (quizId) => {
-    alert(`Edit quiz ${quizId}`);
+   navigate(`/teacher-createquiz/${quizId}`);
   };
 
   const handleDelete = async (quizId) => {
@@ -84,9 +81,9 @@ function QuizListPage() {
     
     if (success) {
       setQuizzes(prevQuizzes => prevQuizzes.filter(q => q.id !== quizId));
-      alert("Quiz deleted successfully");
+      toast.success("Quiz deleted successfully");
     } else {
-      alert("Failed to delete quiz");
+      toast.error("Failed to delete quiz");
     }
   };
 
@@ -163,13 +160,13 @@ function QuizListPage() {
               </button>
               <button
                 onClick={() => handleDelete(quiz.id)}
-                className="btn btn-ghost bg-red-500 hover:bg-red-600 transition cursor-pointer rounded-2xl text-lg px-4"
+                className="btn btn-ghost bg-red-600 hover:bg-red-700 transition cursor-pointer rounded-2xl text-lg px-4"
                 style={{
                   color: "white",
                   fontFamily: "Nunito",
                 }}
               >
-                🗑️
+                <FontAwesomeIcon icon={faTrashCan} />
               </button>
             </div>
           </div>

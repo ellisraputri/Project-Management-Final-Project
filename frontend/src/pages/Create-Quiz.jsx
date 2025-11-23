@@ -15,6 +15,9 @@ import templateCompleteFile from '../assets/template_complete_sentence.xlsx';
 import templateFruitFile from '../assets/template_fruit_ninja.xlsx';
 import templateUnjumbleFile from '../assets/template_unjumble.xlsx';
 import { getUser } from '../service/auth';
+import Modal from "../components/Modal";
+import { getLeaderboard } from '../service/record';
+import Leaderboard from '../components/Leaderboard';
 
 
 function CreateQuizPage() {
@@ -33,10 +36,11 @@ function CreateQuizPage() {
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [timeLimit, setTimeLimit] = useState(15);
+  const [openLeaderboard, setOpenLeaderboard] = useState(false);
+  const [leaderboards, setLeaderboards] = useState([]);
 
   async function fetchQuizInfo(){
     if (quizID === 'newquiz'){
-      toast.success("New quiz created!");
       return
     }
     const resp = await getQuizInfos(quizID);
@@ -143,6 +147,7 @@ function CreateQuizPage() {
       }
       else{
         toast.success('Quiz successfully updated!')
+        navigate('/')
       }
     }
   }
@@ -258,6 +263,21 @@ function CreateQuizPage() {
     link.click();
   };
 
+  const onOpenLeaderboard = async() =>{
+    const leaderboardRes = await getLeaderboard(quizID);
+    if(leaderboardRes === null){
+      toast.info("There is no player yet");
+      return;
+    }
+
+    const sortedTracks = [...leaderboardRes].sort((a, b) => {
+      if (b.score !== a.score) return b.score - a.score;         
+      return a.timeTaken - b.timeTaken;                          
+    });
+    setLeaderboards(sortedTracks);
+    setOpenLeaderboard(true);
+  }
+
 
   useEffect(() => {
     if (!quizID) return;
@@ -297,14 +317,38 @@ function CreateQuizPage() {
             <b>{title}</b>
           </p>
         </div>
-        
+
+        <div>
+          {quizID !== 'newquiz' &&
+            <button onClick={()=>onOpenLeaderboard()}
+              className="px-6 py-2 mr-3 rounded-full bg-[#6D94C5] text-white text-lg font-semibold shadow-md hover:bg-[#4c6e98] transition cursor-pointer"
+              style={{ fontFamily: "Nunito" }}
+            >
+              Show Leaderboard
+            </button>
+          }
+
         <button onClick={handleSaveQuiz}
           className="px-6 py-2 mr-3 rounded-full bg-[#6D94C5] text-white text-lg font-semibold shadow-md hover:bg-[#4c6e98] transition cursor-pointer"
           style={{ fontFamily: "Nunito" }}
         >
           {quizID === 'newquiz' ? 'Publish' : 'Save'}
         </button>
+        </div>
       </div>
+
+      <Modal isOpen={openLeaderboard} onClose={() => setOpenLeaderboard(false)}>
+        
+        <Leaderboard tracks={leaderboards} />
+
+        <button
+          onClick={() => setOpenLeaderboard(false)}
+          className="px-6 mt-4 py-2 mr-3 rounded-full bg-[#6D94C5] text-white text-lg font-semibold shadow-md hover:bg-[#4c6e98] transition cursor-pointer"
+          style={{ fontFamily: "Nunito" }}
+        >
+          Close
+        </button>
+      </Modal>
 
       <div className="flex items-center justify-between">
           <div className="bg-white w-8/10 rounded-2xl shadow-lg p-4 m-5 ml-15 mt-8 min-h-[620px] mb-10">

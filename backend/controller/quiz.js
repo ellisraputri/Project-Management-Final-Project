@@ -290,6 +290,9 @@ export const getTeacherQuizzes = async(req, res) => {
     }
 }
 
+function generateRandomString(length) {
+  return Math.random().toString(36).substring(2, 2 + length);
+}
 
 export const toggleShareQuiz = async(req, res) => {
     try {
@@ -311,21 +314,26 @@ export const toggleShareQuiz = async(req, res) => {
                 return res.status(400).json({ success: false, message: "Invalid quiz type" });
         }
 
-        
         const quiz = await model.findOne({ _id: quizId, creatorId: teacherId, isDeleted: false });
         
         if (!quiz) {
             return res.status(404).json({ success: false, message: "Quiz not found or unauthorized" });
         }
 
-        
         quiz.isShared = !quiz.isShared;
+        if(quiz.isShared){
+            quiz.quizCode = generateRandomString(6);
+        }
+        else{
+            quiz.quizCode = "-";
+        }
         await quiz.save();
 
         return res.status(200).json({ 
             success: true, 
             message: `Quiz ${quiz.isShared ? 'shared' : 'unshared'} successfully`,
-            isShared: quiz.isShared 
+            isShared: quiz.isShared,
+            quizCode : quiz.quizCode,
         });
 
     } catch (error) {
