@@ -1,4 +1,7 @@
 export function getHttp(){
-    const apiUrl = import.meta.env.VITE_API_URL;
+    let apiUrl = import.meta.env.VITE_API_URL;
+    if (import.meta.env.MODE !== "development"){
+        apiUrl = "/"
+    }
     return apiUrl;
 }
