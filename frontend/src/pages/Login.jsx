@@ -4,6 +4,7 @@ import { FaGoogle } from 'react-icons/fa'
 import { useNavigate } from "react-router-dom";
 import { login } from '../service/auth';
 import { toast } from 'react-toastify';
+import logoPic from "../assets/logo.png"
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ function LoginPage() {
         <div className="flex flex-col items-center mb-8">
           <div className='flex items-center gap-3 mb-2'>
             <img
-              src="src/assets/logo.png" 
+              src={logoPic}
               alt="CQGame Pro logo"
               className="w-16 h-12 mb-2"
             />

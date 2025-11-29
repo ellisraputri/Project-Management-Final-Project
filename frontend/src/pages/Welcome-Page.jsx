@@ -4,6 +4,7 @@ import BackgroundLayout from '../components/Background-Layout'
 import { useNavigate } from 'react-router-dom';
 import { getQuizTypeFromCode } from '../service/quiz';
 import { toast } from 'react-toastify';
+import logoPic from "../assets/logo.png"
 
 function WelcomePage() {
   const [name, setName] = useState("");
@@ -31,7 +32,7 @@ function WelcomePage() {
       <div className="flex flex-col items-center mb-8">
         <div className='flex items-center gap-3 mb-2'>
           <img
-            src="src/assets/logo.png" 
+            src={logoPic}
             alt="CQGame Pro logo"
             className="w-16 h-12 mb-2"
           />
