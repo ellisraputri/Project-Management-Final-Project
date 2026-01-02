@@ -10,7 +10,7 @@
 - Vammy Johannis Jiang (2702368122)
 
 
-**Deployment Link:** [Click here](https://project-management-final-project-production.up.railway.app/)
+**Deployment Link:** [Click here](https://courageous-miracle-production.up.railway.app/)
 
 <br>
 
